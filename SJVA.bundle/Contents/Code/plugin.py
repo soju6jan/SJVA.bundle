@@ -22,15 +22,11 @@ class PluginHandle(object):
 
     @classmethod
     def get_list(cls):
-        #https://raw.githubusercontent.com/soju6jan/SJVA/master/SJVA.bundle.plugin/list.json
         url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/plugin_list.json'
         data = JSON.ObjectFromURL(url)
         Log(data)
         cls.plugin_list = data
         return cls.plugin_list
-        #return ['DaumMovie(axfree)', 'DaumMovieTVSeries(wonipapa)']
-        #http://127.0.0.1:32400/:/plugins
-    
 
     @classmethod
     def is_plugin_install(cls, identifier):
@@ -102,7 +98,7 @@ class PluginHandle(object):
 
     @classmethod
     def get_git_version(cls):
-        url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/version'
+        url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/SJVA.bundle/Contents/Code/version.py'
         data = HTTP.Request(url).content
         Log(data)
         return data
@@ -130,11 +126,14 @@ class PluginInstallThread(threading.Thread):
                     except:
                         pass
                 temp_path = os.path.join(CURRENT_PATH, 'zip')
-                if not os.path.exists(temp_path):
-                    os.mkdir(temp_path)
-                else:
-                    shutil.rmtree(temp_path)
-                    os.mkdir(temp_path)
+                try:
+                    if not os.path.exists(temp_path):
+                        os.mkdir(temp_path)
+                    else:
+                        shutil.rmtree(temp_path)
+                        os.mkdir(temp_path)
+                except:
+                    pass
                 zip_temp_filename = os.path.join(temp_path, self.data['identifier'] + '.zip')
                 with io.open(zip_temp_filename, "wb") as local_file:
                     local_file.write(filedata)
@@ -180,8 +179,6 @@ class PluginInstallThread(threading.Thread):
                         except:
                             dest = os.path.dirname(dest)
                             pass
-                    print src
-                    print dest
                     shutil.move(src, dest) 
                     #shutil.rmtree(temp_path)
             elif self.data['type'] == 'scanner_show':
@@ -216,10 +213,9 @@ class PluginInstallThread(threading.Thread):
                 pass
 
 # 지우지말것
-
 if __name__ == '__main__':
-    #with io.open('aaa', "w") as local_file:
-    #    local_file.write(u'aaa')
+    #with io.open('test', "w") as local_file:
+    #    local_file.write(u'test')
     data = {}
     data['type'] = "normal"
     data["identifier"] = "com.plexapp.plugins.SJVA"

@@ -5,6 +5,7 @@ import sys
 import time
     
 import base
+from version import GitVersion
 from entity import EntityScan
 from scan_queue import ScanQueue
 from file_manager import FileManager
@@ -82,7 +83,7 @@ def MainMenu():
         message = [ 
             '',  
             '<Status>',
-            ' - Plug-in Version : %s' % base.VERSION, 
+            ' - Plug-in Version : %s' % GitVersion, 
             ' - Server OS : %s & Client.Product : %s' % (Platform.OS, Client.Product),
             #' - SJVA Server on PMS : %s' % (None if SJVA_PMS.sjva_pms_process is None else SJVA_PMS.sjva_pms_process.poll()), 
             ' - SJVA Server on PMS : %s' % ('Not Running' if SJVA_PMS.version is None else SJVA_PMS.version),
@@ -278,12 +279,17 @@ def Update(force=False):
         oc = ObjectContainer(title2=unicode('업데이트'))
         message = '업데이트 & 재설치'
         oc.add(DirectoryObject(key = Callback(Update, force=True), title=unicode(message)))
-        message = 'Current Version : %s' % base.VERSION
+        message = 'Current Version : %s' % GitVersion
         oc.add(DirectoryObject(key = Callback(Label, message=message), title=unicode(message)))
         git = PluginHandle.get_git_version()
+        start = False
         for _ in git.split('\n'):
-            message = _.strip()
-            oc.add(DirectoryObject(key = Callback(Label, message=message), title=unicode(message)))
+            if _ == '"""':
+                start = not start
+                continue
+            if start:
+                message = _.strip()
+                oc.add(DirectoryObject(key = Callback(Label, message=message), title=unicode(message)))
         return oc
 
 @route(PREFIX + '/PluginCheck')
@@ -329,7 +335,7 @@ def Label(message):
 ###############################################################
 @route('/version') 
 def version():
-    return base.VERSION
+    return GitVersion
 
 @route('/WaitFile')   
 def WaitFile(section_id, filename, callback, callback_id, type_add_remove, call_from):
