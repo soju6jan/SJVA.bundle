@@ -210,8 +210,8 @@ class PluginInstallThread(threading.Thread):
             if self.plugin_handle_instance is not None:
                 self.plugin_handle_instance.thread_instance = None
             try:
-                shutil.rmtree(temp_path)
-                #pass
+                #shutil.rmtree(temp_path)
+                pass
             except:
                 pass
 
