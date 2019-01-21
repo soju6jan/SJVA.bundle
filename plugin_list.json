@@ -3,6 +3,16 @@
     "list" : [
         {
             "type" : "normal",
+            "identifier" : "com.plexapp.plugins.SJVA",   
+            "name" : "SJVA",
+            "url_icon" : "https://github.com/soju6jan/SJVA.bundle/raw/master/SJVA.bundle/Contents/Resources/icon-default.png",
+            "description" : "SJVA",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/SJVA.bundle/archive/master.zip",
+            "root" : ["SJVA.bundle-master", "SJVA.bundle"]
+        },
+        {
+            "type" : "normal",
             "identifier" : "com.plexapp.plugins.WebTools",   
             "name" : "WebTools",
             "url_icon" : "https://github.com/ukdtom/WebTools.bundle/raw/master/Contents/Resources/WebTools.png",
