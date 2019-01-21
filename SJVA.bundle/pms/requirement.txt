@@ -1,0 +1,6 @@
+requests
+flask
+oauth2client
+google-api-python-client
+watchdog
+sqlitedict

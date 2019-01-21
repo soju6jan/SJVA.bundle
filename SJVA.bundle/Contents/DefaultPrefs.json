@@ -1,0 +1,60 @@
+[
+	{
+		"id": "use_recent_episode_at_show_dated",
+		"label": "스캔시 쇼 추가날짜를 최근 에피소드 추가날짜로 변경",
+		"type": "bool",
+		"option": "False",
+		"default": "False"
+	},
+	{
+		"id": "use_all_library",
+		"label": "전체 라이브러리 경로 자동 감시",
+		"type": "bool",
+		"option": "True",
+		"default": "True"
+	},
+	{
+		"id": "watchdog_path",
+		"label": "전체 라이브러리 경로 자동 감시 체크해제시 사용하는 Watchdog 경로(| 으로 구분)",
+		"type": "text",
+		"default": ""
+	},
+	{
+		"id": "use_manual_scanner",
+		"label": "스캐너 명령 직접 사용",
+		"type": "bool",
+		"option": "False",
+		"default": "False"
+	},
+	{
+		"id": "use_manual_scanner_command",
+		"label": "스캐너 명령 직접 사용 시 command. 첫번째 %s:section id 두번째 %s:directory",
+		"type": "text",
+		"default": ""
+	},
+	{
+		"id": "sjva_callback",
+		"label": "SJVA Server (| 으로 구분)",
+		"type": "text",
+		"default": ""
+	},
+
+	{
+		"id": "sjva_pms_port",
+		"label": "SJVA in PMS Port",
+		"type": "text",
+		"default": "35400"
+	},
+	{
+		"id": "current_gdrive_name",
+		"label": "구글 인증 정보를 저장할 토큰 이름. 2개 이상 저장할 경우 다른 이름",
+		"type": "text",
+		"default": "token"
+	},
+	{
+		"id": "gdrive_match_rule",
+		"label": "GDrive 매칭식",
+		"type": "text",
+		"default": ""
+	},
+]

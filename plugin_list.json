@@ -1,0 +1,230 @@
+{
+    "version" : "0.0.1.0",
+    "list" : [
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.WebTools",   
+            "name" : "WebTools",
+            "url_icon" : "https://github.com/ukdtom/WebTools.bundle/raw/master/Contents/Resources/WebTools.png",
+            "description" : "WebTools",
+            "author" : "ukdtom",
+            "url_zip" : "https://github.com/ukdtom/WebTools.bundle/archive/master.zip"
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.daum_movie",
+            "name" : "DaumMovie(axfree)",
+            "url_icon" : "https://github.com/axfree/DaumMovie.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "axfree님의 Daum Agent",
+            "author" : "axfree",
+            "url_zip" : "https://github.com/axfree/DaumMovie.bundle/archive/master.zip"
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.daum_tv_series",
+            "name" : "DaumMovieTVSeries(wonipapa)",
+            "url_icon" : "https://github.com/wonipapa/DaumMovieTVSeries.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "wonipapa님의 Daum Series Agent",
+            "author" : "wonipapa",
+            "url_zip" : "https://github.com/wonipapa/DaumMovieTVSeries.bundle/archive/master.zip"
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.sj_daum",   
+            "name" : "SJ Daum",
+            "url_icon" : "https://github.com/soju6jan/SJ_Daum.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "Daum Agent",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/SJ_Daum.bundle/archive/master.zip"
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.naver_music",   
+            "name" : "NaverMusic(hojel)",
+            "url_icon" : "https://github.com/hojel/NaverMusic.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "hojel님의 NaverMusic",
+            "author" : "hojel",
+            "url_zip" : "https://github.com/hojel/NaverMusic.bundle/archive/master.zip",
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.naver_music",   
+            "name" : "NaverMusic Fork버전",
+            "url_icon" : "https://github.com/soju6jan/NaverMusic.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "NaverMusic",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/NaverMusic.bundle/archive/master.zip",
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.localtvextras",
+            "name" : "LocalTVExtras",
+            "url_icon" : "https://github.com/contrary-cat/LocalTVExtras.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "TV쇼에 부가영상을 넣을 수 있는 Agent",
+            "author" : "contrary-cat",
+            "url_zip" : "https://github.com/contrary-cat/LocalTVExtras.bundle/archive/master.zip"
+        },        
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.xbmcnfo",   
+            "name" : "XBMCnfoMoviesImporter",
+            "url_icon" : "https://github.com/gboudreau/XBMCnfoMoviesImporter.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "XBMCnfoMoviesImporter",
+            "author" : "gboudreau",
+            "url_zip" : "https://github.com/gboudreau/XBMCnfoMoviesImporter.bundle/archive/master.zip"
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.xbmcnfotv",   
+            "name" : "XBMCnfoTVImporter",
+            "url_icon" : "https://github.com/gboudreau/XBMCnfoTVImporter.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "XBMCnfoTVImporter",
+            "author" : "gboudreau",
+            "url_zip" : "https://github.com/gboudreau/XBMCnfoTVImporter.bundle/archive/master.zip"
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.sj_jav_agent",   
+            "name" : "SJ JAV",
+            "url_icon" : "",
+            "description" : "SJ JAV",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/sj_jav/archive/master.zip",
+            "root" : ["sj_jav-master", "SJ_JAV_Agent.bundle"]
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.avgle",   
+            "name" : "Avgle",
+            "url_icon" : "",
+            "description" : "Avgle",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/Avgle.bundle/archive/master.zip",
+            "root" : ["Avgle.bundle-master", "Avgle.bundle"]
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.alsonglyricfind",   
+            "name" : "AlsongLyricFind",
+            "url_icon" : "",
+            "description" : "AlsongLyricFind",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/AlsongLyricFind.bundle/archive/master.zip",
+        },
+        {
+            "type" : "normal",
+            "identifier" : "at.gaubatz.patrick.tvplexend.channel",   
+            "name" : "TvplexendChannel",
+            "url_icon" : "https://github.com/pgaubatz/TvplexendChannel.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "TvplexendChannel",
+            "author" : "pgaubatz",
+            "url_zip" : "https://github.com/pgaubatz/TvplexendChannel.bundle/archive/master.zip",
+        },
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.tvheadend-ng",   
+            "name" : "tvheadend-ng",
+            "url_icon" : "https://github.com/realriot/tvheadend-ng.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "tvheadend-ng",
+            "author" : "realriot",
+            "url_zip" : "https://github.com/realriot/tvheadend-ng.bundle/archive/master.zip"
+        },
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.iptv",   
+            "name" : "IPTV",
+            "url_icon" : "https://github.com/Cigaras/IPTV.bundle/raw/master/Contents/Resources/icon-default.png",
+            "description" : "IPTV",
+            "author" : "Cigaras",
+            "url_zip" : "https://github.com/Cigaras/IPTV.bundle/archive/master.zip"
+        },
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.pooq",   
+            "name" : "pooq",
+            "url_icon" : "https://github.com/soju6jan/pooq/raw/master/Pooq.bundle/Contents/Resources/icon-default.png",
+            "description" : "pooq",
+            "author" : "AnAs",
+            "url_zip" : "https://github.com/soju6jan/pooq/archive/master.zip",
+            "root" : ["pooq-master", "Pooq.bundle"]
+        },
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.tving",   
+            "name" : "Tving",
+            "url_icon" : "https://github.com/soju6jan/tving/raw/master/Tving.bundle/Contents/Resources/icon-default.png",
+            "description" : "Tving",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/tving/archive/master.zip",
+            "root" : ["tving-master", "Tving.bundle"],
+            "manual" : [
+                { 
+                    "type" : "move", 
+                    "src": ["tving-master", "tving.py"], 
+                    "dest" : ["tving-master", "Tving.bundle", "Contents", "Code"]
+                }
+            ]
+        },
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.oksusu",   
+            "name" : "Oksusu",
+            "url_icon" : "https://github.com/soju6jan/oksusu/raw/master/Oksusu.bundle/Contents/Resources/icon-default.png",
+            "description" : "Oksusu",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/oksusu/archive/master.zip",
+            "root" : ["oksusu-master", "Oksusu.bundle"],
+            "manual" : [
+                { 
+                    "type" : "move", 
+                    "src": ["oksusu-master", "oksusu.py"], 
+                    "dest" : ["oksusu-master", "Oksusu.bundle", "Contents", "Code"]
+                }
+            ]
+        },
+        {
+            "type" : "normal",
+            "identifier" : "com.plexapp.plugins.klive",   
+            "name" : "KLive",
+            "url_icon" : "https://github.com/soju6jan/KLive/raw/master/KLive.bundle/Contents/Resources/icon-default.png",
+            "description" : "KLive",
+            "author" : "soju6jan",
+            "url_zip" : "https://github.com/soju6jan/KLive/archive/master.zip",
+            "root" : ["KLive-master", "KLive.bundle"],
+            "manual" : [
+                { 
+                    "type" : "move_all_file", 
+                    "src": ["KLive-master", "lib"], 
+                    "dest" : ["KLive-master", "KLive.bundle", "Contents", "Code"]
+                }
+            ]
+        },
+        {
+            "type" : "scanner_show",
+            "identifier" : "scanner_show|Plex_Series_Scanner_Patch.py",
+            "name" : "Plex Series Scanner Patch",
+            "url_icon" : "",
+            "description" : "기본 스캐너에서 스캔시간 단축을 위한 패치",
+            "author" : "soju6jan",
+            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/Plex_Series_Scanner_Patch.py"
+        },
+        {
+            "type" : "scanner_show",
+            "identifier" : "scanner_show|SJVA_Scanner_KoreaTV.py",
+            "name" : "Scanner for Korea TV",
+            "url_icon" : "",
+            "description" : "국내 TV방송용 스캐너",
+            "author" : "soju6jan",
+            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV.py"
+        },
+        {
+            "type" : "scanner_show",
+            "identifier" : "scanner_show|SJVA_Scanner_KoreaTV_Download.py",
+            "name" : "Scanner for Korea TV Download",
+            "url_icon" : "",
+            "description" : "국내방송 다운로드 폴더용 스캐너",
+            "author" : "soju6jan",
+            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV_Download.py"
+        },
+    ]
+}
