@@ -12,6 +12,33 @@
             "root" : ["SJVA.bundle-master", "SJVA.bundle"]
         },
         {
+            "type" : "scanner_show",
+            "identifier" : "scanner_show|Plex_Series_Scanner_Patch.py",
+            "name" : "Plex Series Scanner Patch",
+            "url_icon" : "",
+            "description" : "기본 스캐너에서 스캔시간 단축을 위한 패치",
+            "author" : "soju6jan",
+            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/Plex_Series_Scanner_Patch.py"
+        },
+        {
+            "type" : "scanner_show",
+            "identifier" : "scanner_show|SJVA_Scanner_KoreaTV.py",
+            "name" : "Scanner for Korea TV",
+            "url_icon" : "",
+            "description" : "국내TV용 스캐너. E다음만 회차인식, 천회이상 인식등.",
+            "author" : "soju6jan",
+            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV.py"
+        },
+        {
+            "type" : "scanner_show",
+            "identifier" : "scanner_show|SJVA_Scanner_KoreaTV_Download.py",
+            "name" : "Scanner for Korea TV Download",
+            "url_icon" : "",
+            "description" : "국내TV 다운로드 폴더용 스캐너",
+            "author" : "soju6jan",
+            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV_Download.py"
+        },        
+        {
             "type" : "normal",
             "identifier" : "com.plexapp.plugins.WebTools",   
             "name" : "WebTools",
@@ -208,33 +235,6 @@
                     "dest" : ["KLive-master", "KLive.bundle", "Contents", "Code"]
                 }
             ]
-        },
-        {
-            "type" : "scanner_show",
-            "identifier" : "scanner_show|Plex_Series_Scanner_Patch.py",
-            "name" : "Plex Series Scanner Patch",
-            "url_icon" : "",
-            "description" : "기본 스캐너에서 스캔시간 단축을 위한 패치",
-            "author" : "soju6jan",
-            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/Plex_Series_Scanner_Patch.py"
-        },
-        {
-            "type" : "scanner_show",
-            "identifier" : "scanner_show|SJVA_Scanner_KoreaTV.py",
-            "name" : "Scanner for Korea TV",
-            "url_icon" : "",
-            "description" : "국내 TV방송용 스캐너",
-            "author" : "soju6jan",
-            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV.py"
-        },
-        {
-            "type" : "scanner_show",
-            "identifier" : "scanner_show|SJVA_Scanner_KoreaTV_Download.py",
-            "name" : "Scanner for Korea TV Download",
-            "url_icon" : "",
-            "description" : "국내방송 다운로드 폴더용 스캐너",
-            "author" : "soju6jan",
-            "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV_Download.py"
         },
     ]
 }
