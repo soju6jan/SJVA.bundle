@@ -8,7 +8,7 @@ import threading
 
 sys.setdefaultencoding('utf-8')
 
-VERSION = '2019-01-20 02' 
+VERSION = '2019-01-20 03' 
 OS = Platform.OS
 CURRENT_PATH = re.sub(r'^\\\\\?\\', '', os.getcwd())
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-in Support', 'Databases', 'com.plexapp.plugins.library.db')
