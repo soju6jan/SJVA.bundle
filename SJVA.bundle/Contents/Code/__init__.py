@@ -120,7 +120,7 @@ def Action(action_type):
     elif action_type == 'PLUG_IN_INSTALL':
         return Plugin()
     elif action_type == 'SELF_UPDATE':
-        pass 
+        return Update() 
     elif action_type == 'SJVA_PMS_START':
         if SJVA_PMS.is_sjva_pms_run():
             message = '이미 실행중. 버전:%s' % SJVA_PMS.version
@@ -187,7 +187,6 @@ def Action(action_type):
     elif action_type == 'STREAMING_REFRESH':
         ret = TVHeadend.init_list()
         message = '%s개 채널 업데이트' % ret
-
     elif action_type == 'DB_SHOW_ADDED_BY_LAST_EPISODE':
         ret = base.sql_command(0)
         if ret:
@@ -247,7 +246,7 @@ def Detail(detail):
 @route(PREFIX + '/Plugin')
 def Plugin():
     oc = ObjectContainer(title2=unicode('플러그인'))
-    for _ in PluginHandle.get_list()['list']:
+    for _ in PluginHandle.get_list()['list'][1:]:
         oc.add(
             DirectoryObject(
                 key = Callback(PluginCheck, title=unicode(_['name']), identifier=_['identifier']), 
@@ -257,6 +256,35 @@ def Plugin():
             )
         )
     return oc 
+
+@route(PREFIX + '/Update')
+def Update(force=False):
+    if force:
+        if SJVA_PMS.is_sjva_pms_run():
+            SJVA_PMS.stop()
+        ret = PluginHandle.update()
+        if ret == 'RUNNING':
+            message = '설치 작업이 진행중입니다. 잠시 후 다시 실행해주세요.'
+        elif ret == 'ERROR':
+            message = 'ERROR'
+        elif ret == 'OK':
+            message = '업데이트 작업이 시작되었습니다. 재실행 후 버전을 확인하세요.'
+        return ObjectContainer(  
+            title1 = unicode(L('업데이트')), 
+            header = unicode(L('Action')),   
+            message = unicode(L(message))  
+        )
+    else:
+        oc = ObjectContainer(title2=unicode('업데이트'))
+        message = '업데이트 & 재설치'
+        oc.add(DirectoryObject(key = Callback(Update, force=True), title=unicode(message)))
+        message = 'Current Version : %s' % base.VERSION
+        oc.add(DirectoryObject(key = Callback(Label, message=message), title=unicode(message)))
+        git = PluginHandle.get_git_version()
+        for _ in git.split('\n'):
+            message = _.strip()
+            oc.add(DirectoryObject(key = Callback(Label, message=message), title=unicode(message)))
+        return oc
 
 @route(PREFIX + '/PluginCheck')
 def PluginCheck(title, identifier, force=False):

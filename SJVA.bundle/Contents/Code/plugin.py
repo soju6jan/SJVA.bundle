@@ -17,7 +17,7 @@ class PluginHandle(object):
     @classmethod
     def get_list(cls):
         #https://raw.githubusercontent.com/soju6jan/SJVA/master/SJVA.bundle.plugin/list.json
-        url = 'https://raw.githubusercontent.com/soju6jan/SJVA/master/SJVA.bundle.plugin/list.json'
+        url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/plugin_list.json'
         data = JSON.ObjectFromURL(url)
         Log(data)
         cls.plugin_list = data
@@ -62,7 +62,17 @@ class PluginHandle(object):
         cls.thread_instance.daemon = True
         cls.thread_instance.start()
         return 'OK'
+    
+    @classmethod
+    def update(cls):
+        return cls.install('com.plexapp.plugins.SJVA')
 
+    @classmethod
+    def get_git_version(cls):
+        url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/version'
+        data = HTTP.Request(url).content
+        Log(data)
+        return data
 
 class PluginInstallThread(threading.Thread):
     data = None
