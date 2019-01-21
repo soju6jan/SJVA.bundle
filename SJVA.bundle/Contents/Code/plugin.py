@@ -6,9 +6,15 @@ import time
 import zipfile
 import urllib
 import shutil
+import re
+import traceback
+import subprocess
+try:
+    import base
+except:
+    pass
 
-import base
-
+CURRENT_PATH = re.sub(r'^\\\\\?\\', '', os.getcwd())
 
 class PluginHandle(object):
     plugin_list = None
@@ -29,7 +35,7 @@ class PluginHandle(object):
     @classmethod
     def is_plugin_install(cls, identifier):
         if identifier.startswith('scanner_show'):
-            plex_root = os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH)))
+            plex_root = os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH)))
             scanner_path = os.path.join(plex_root, 'Scanners', 'Series', identifier.split('|')[1])
             try:
                 return os.path.exists(scanner_path)
@@ -63,9 +69,36 @@ class PluginHandle(object):
         cls.thread_instance.start()
         return 'OK'
     
+    """
     @classmethod
     def update(cls):
         return cls.install('com.plexapp.plugins.SJVA')
+    """
+    
+    @classmethod
+    def update(cls):
+        #copy
+        import threading
+        def thread_function():
+            THIS_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH))), 'Plug-ins', 'SJVA.bundle', 'Contents', 'Code', 'plugin.py') 
+            DEST_FILE = os.path.join(CURRENT_PATH, 'plugin.py') 
+            try:
+                shutil.copyfile(THIS_FILE, DEST_FILE)
+                command = '"%s" "%s"' % (base.PYTHON, DEST_FILE)
+                Log('UPDATE %s',  command )
+                #shell true 파일쓰기 권한 없음.
+                if base.is_windows():
+                    proc = subprocess.Popen(command)
+                else:
+                    proc = subprocess.Popen(command, env={"PYTHONPATH": "."})
+                proc.communicate()
+            except Exception, e: 
+                Log('Exception:%s', e)
+                Log(traceback.format_exc())
+        t = threading.Thread(target=thread_function, args=())
+        #t.daemon = True
+        t.start()
+        return 'OK'
 
     @classmethod
     def get_git_version(cls):
@@ -86,9 +119,21 @@ class PluginInstallThread(threading.Thread):
         try:
             if self.data['type'] == 'agent' or self.data['type'] == 'normal':
                 zip_file_url = self.data['url_zip']
-                filedata = HTTP.Request(zip_file_url).content
-                temp_path = os.path.join(base.CURRENT_PATH, 'zip')
+                try:
+                    filedata = HTTP.Request(zip_file_url).content
+                except:
+                    try:
+                        import urllib, urllib2
+                        request = urllib2.Request(zip_file_url)
+                        response = urllib2.urlopen(request)
+                        filedata = response.read()
+                    except:
+                        pass
+                temp_path = os.path.join(CURRENT_PATH, 'zip')
                 if not os.path.exists(temp_path):
+                    os.mkdir(temp_path)
+                else:
+                    shutil.rmtree(temp_path)
                     os.mkdir(temp_path)
                 zip_temp_filename = os.path.join(temp_path, self.data['identifier'] + '.zip')
                 with io.open(zip_temp_filename, "wb") as local_file:
@@ -122,19 +167,25 @@ class PluginInstallThread(threading.Thread):
                                     shutil.move(os.path.join(manual_src, tmp3), manual_dest)
                     if 'root' in self.data:
                         bundle = self.data['root'][len(self.data['root'])-1]
-                        dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH))), 'Plug-ins', bundle)
+                        dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', bundle)
                         src = temp_path
                         for _ in self.data['root']:
                             src = os.path.join(src, _)
                     else:
-                        dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH))), 'Plug-ins', zip_root.replace('-master', ''))
+                        dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', zip_root.replace('-master', ''))
                         src = os.path.join(temp_path, zip_root)
                     if os.path.exists(dest):
-                        shutil.rmtree(dest)
+                        try:
+                            shutil.rmtree(dest)
+                        except:
+                            dest = os.path.dirname(dest)
+                            pass
+                    print src
+                    print dest
                     shutil.move(src, dest) 
                     #shutil.rmtree(temp_path)
             elif self.data['type'] == 'scanner_show':
-                plex_root = os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH)))
+                plex_root = os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH)))
                 series_dir = ['Scanners', 'Series']
                 tmp = plex_root
                 for _ in series_dir:
@@ -148,11 +199,39 @@ class PluginInstallThread(threading.Thread):
                 with io.open(scanner_path, "wb") as local_file:
                     local_file.write(filedata)
         except Exception as e:
-            Log('Exception : %s', e)
-            Log(traceback.format_exc()) 
+            try:
+                Log('Exception : %s', e)
+                Log(traceback.format_exc()) 
+            except:
+                print e
+                print traceback.format_exc()
+
         finally:
-            self.plugin_handle_instance.thread_instance = None
+            if self.plugin_handle_instance is not None:
+                self.plugin_handle_instance.thread_instance = None
             try:
                 shutil.rmtree(temp_path)
+                #pass
             except:
                 pass
+
+# 지우지말것
+
+if __name__ == '__main__':
+    #with io.open('aaa', "w") as local_file:
+    #    local_file.write(u'aaa')
+    data = {}
+    data['type'] = "normal"
+    data["identifier"] = "com.plexapp.plugins.SJVA"
+    data["name"] = "SJVA"
+    data["url_icon"] = "https://github.com/soju6jan/SJVA.bundle/raw/master/SJVA.bundle/Contents/Resources/icon-default.png"
+    data["description"] = "SJVA"
+    data["author"] = "soju6jan"
+    data["url_zip"] = "https://github.com/soju6jan/SJVA.bundle/archive/master.zip"
+    data["root"] = ["SJVA.bundle-master", "SJVA.bundle"]
+
+    thread_instance = PluginInstallThread()
+    thread_instance.set_data(None, data)
+    thread_instance.daemon = False
+    thread_instance.start()
+    thread_instance.join()
