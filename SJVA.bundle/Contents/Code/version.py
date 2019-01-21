@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-LastVersion = '2019.01.21 05'
+GitVersion = '2019.01.21 05'
 """
  - 최초 릴리즈
 
