@@ -5,7 +5,7 @@ import sys
 import time
     
 import base
-from version import GitVersion
+from version import VERSION
 from entity import EntityScan
 from scan_queue import ScanQueue
 from file_manager import FileManager
@@ -83,7 +83,7 @@ def MainMenu():
         message = [ 
             '',  
             '<Status>',
-            ' - Plug-in Version : %s' % GitVersion, 
+            ' - Plug-in Version : %s' % VERSION, 
             ' - Server OS : %s & Client.Product : %s' % (Platform.OS, Client.Product),
             #' - SJVA Server on PMS : %s' % (None if SJVA_PMS.sjva_pms_process is None else SJVA_PMS.sjva_pms_process.poll()), 
             ' - SJVA Server on PMS : %s' % ('Not Running' if SJVA_PMS.version is None else SJVA_PMS.version),
@@ -279,7 +279,7 @@ def Update(force=False):
         oc = ObjectContainer(title2=unicode('업데이트'))
         message = '업데이트 & 재설치'
         oc.add(DirectoryObject(key = Callback(Update, force=True), title=unicode(message)))
-        message = 'Current Version : %s' % GitVersion
+        message = 'Current Version : %s' % VERSION
         oc.add(DirectoryObject(key = Callback(Label, message=message), title=unicode(message)))
         git = PluginHandle.get_git_version()
         start = False
@@ -335,7 +335,7 @@ def Label(message):
 ###############################################################
 @route('/version') 
 def version():
-    return GitVersion
+    return VERSION
 
 @route('/WaitFile')   
 def WaitFile(section_id, filename, callback, callback_id, type_add_remove, call_from):
