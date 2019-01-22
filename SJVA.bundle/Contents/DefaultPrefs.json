@@ -7,43 +7,16 @@
 		"default": "False"
 	},
 	{
-		"id": "use_all_library",
-		"label": "전체 라이브러리 경로 자동 감시",
-		"type": "bool",
-		"option": "True",
-		"default": "True"
+		"id": "sjva_pms_port",
+		"label": "SJVA Server on PMS Port",
+		"type": "text",
+		"default": "35400"
 	},
 	{
 		"id": "watchdog_path",
-		"label": "전체 라이브러리 경로 자동 감시 체크해제시 사용하는 Watchdog 경로(| 으로 구분)",
+		"label": "드라이브 감시 경로(| 으로 구분)",
 		"type": "text",
 		"default": ""
-	},
-	{
-		"id": "use_manual_scanner",
-		"label": "스캐너 명령 직접 사용",
-		"type": "bool",
-		"option": "False",
-		"default": "False"
-	},
-	{
-		"id": "use_manual_scanner_command",
-		"label": "스캐너 명령 직접 사용 시 command. 첫번째 %s:section id 두번째 %s:directory",
-		"type": "text",
-		"default": ""
-	},
-	{
-		"id": "sjva_callback",
-		"label": "SJVA Server (| 으로 구분)",
-		"type": "text",
-		"default": ""
-	},
-
-	{
-		"id": "sjva_pms_port",
-		"label": "SJVA in PMS Port",
-		"type": "text",
-		"default": "35400"
 	},
 	{
 		"id": "current_gdrive_name",
@@ -53,8 +26,14 @@
 	},
 	{
 		"id": "gdrive_match_rule",
-		"label": "GDrive 매칭식",
+		"label": "GDrive 매칭식 (| 으로 구분)",
 		"type": "text",
 		"default": ""
 	},
+	{
+		"id": "sjva_callback",
+		"label": "SJVA Server (| 으로 구분)",
+		"type": "text",
+		"default": ""
+	}
 ]
