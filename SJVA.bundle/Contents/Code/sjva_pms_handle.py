@@ -7,7 +7,6 @@ import subprocess
 import json
 import base
  
-
 HOST = '127.0.0.1'
 SJVA_PMS_PY = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH))), 'Plug-ins', 'SJVA.bundle', 'pms', 'sjva_pms.py') 
 
@@ -24,48 +23,18 @@ class SJVA_PMS(object):
         Log('Start SJVA PMS Port: %s', port)
         try:    
             command = '"%s" "%s" "%s" "%s" "%s"' % (base.PYTHON, SJVA_PMS_PY, port, host, token)
-            #command = [base.PYTHON, SJVA_PMS_PY, port, host, token]
-            #command = '"/volume1/Plex/Library/Application Support/Plex Media Server/Plug-ins/SJVA.bundle/pms/run.sh"'
             Log(command) 
-            """
-            if base.is_windows():
-                #if type(command) == type( u'' ):
-                #    command = command.encode('cp949') 
-                pass 
-            else:
-                pass  
-
-            try:
-                #command = 'which python'
-                #command = 'python --version'
-                aaa = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, env={"PYTHONPATH": "."})
-            except subprocess.CalledProcessError as cpe:
-                Log('!!!!!!!!!!!!!!!!!!!! %s', cpe.output.decode('cp949'))
-                #Log('!!!!!!!!!!!!!!!!!!!! %s', cpe.output.decode('cp949')) #윈도우
-            """
             if base.is_windows():
                 cls.tmp_sjva_pms_process = subprocess.Popen(command, shell=True)
             else:
                 cls.tmp_sjva_pms_process = subprocess.Popen(command, shell=True, env={"PYTHONPATH": "."})  
-
-            #cls.tmp_sjva_pms_process = subprocess.Popen(command)  
-            
-            
-            #aaa = subprocess.check_output(command, shell=True)
-            #Log('aaaaaaaaa : %s', aaa)
             Log('process :%s', cls.tmp_sjva_pms_process)  
-            #proc.communicate()
-            #cls.sjva_pms_port = port
         except Exception, e: 
             Log('Exception:%s', e)
             Log(traceback.format_exc())
 
-
     @classmethod
     def is_sjva_pms_run(cls):
-        #if cls.sjva_pms_process == None:
-        #    return False
-        #return True
         if cls.flag_start_sjva == False:
             return False
         if cls.version is not None:
@@ -80,10 +49,7 @@ class SJVA_PMS(object):
         try:
             url = 'http://%s:%s/version' % (HOST, cls.sjva_pms_port)
             Log('get_version : %s', url)
-            #params = { 'filename' : self.entity.filename, 'idx' : self.entity.callback_id }
-            #postdata = urllib.urlencode( params ) 
             postdata = ''
-            #request = urllib2.Request(url, postdata)
             request = urllib2.Request(url)
             response = urllib2.urlopen(request) 
             data = response.read()

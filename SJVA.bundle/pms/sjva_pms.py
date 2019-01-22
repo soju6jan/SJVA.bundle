@@ -2,8 +2,6 @@
 import os
 import sys
 
-
-
 import traceback
 import threading
 import urllib2

@@ -13,31 +13,61 @@ from lxml import etree
 class LiveChannels(object):
     @classmethod
     def get_xml(cls, host, token, section_id, start_channel):
-        if section_id == '0': section_id = None
         if section_id is None or section_id == '':
-            return cls.make_recentAdd(host, token, start_channel)
-        else:
-            return cls.make_recentAdd_from_section(host, token, section_id, start_channel)
-    
+            section_id = '0'
+        root = etree.Element('tv')
+        for sid in section_id.split('|'):
+            if sid == '0': 
+                ch_no = cls.make_recentAdd(host, token, root, start_channel)
+            else:
+                ch_no = cls.make_recentAdd_from_section(host, token, root, sid, start_channel)
+            if int(start_channel) < 0:
+                start_channel = '-%s' % ch_no
+            else:
+                start_channel = '%s' % ch_no
+        output = etree.tostring(root, pretty_print=True, encoding='UTF-8')
+        #Log(x_output)
+        header = '<?xml version="1.0" encoding="UTF-8"?>\n'        
+        header += '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
+        xml = header + output
+        return xml.replace('&#13;', '')
+   
     @classmethod
     def get_xml_one(cls, host, token, section_id, start_channel, count):
         try:
             count = int(count)
         except:
             count = 1000
-        return cls.make_recentAdd_one_channel_from_section(host, token, section_id, start_channel, count)
-            
-
-        #return 'aaa'
+        root = etree.Element('tv')
+        if start_channel is None or start_channel == '': 
+            start_channel = 1
+        channel_number = int(start_channel)
+        if channel_number < 0:
+            channel_number = channel_number * -1
+            channel_step = -1
+        else:
+            channel_step = 1
+        for sid in section_id.split('|'):
+            if sid == '0': 
+                pass
+            else:
+                cls.make_recentAdd_one_channel_from_section(host, token, root, sid, channel_number, count)
+            channel_number = channel_number + channel_step
+        output = etree.tostring(root, pretty_print=True, encoding='UTF-8')
+        #Log(x_output)
+        header = '<?xml version="1.0" encoding="UTF-8"?>\n'        
+        header += '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
+        xml = header + output
+        return xml.replace('&#13;', '')
 
     # 채널당 하나의 에피소드
     # 채널당 여러 방송의 에피소드
     # 채널당 하나의 방송    
     @classmethod
-    def make_recentAdd(cls, host, token, start_channel):
+    def make_recentAdd(cls, host, token, root, start_channel):
         # 채널당 하나의 파일
         try:
-            root = etree.Element('tv')
+            #root = etree.Element('tv')
             make_type = 'ONE_FILE_PER_CHANNEL'
             key = '/library/recentlyAdded'
             data = JSON.ObjectFromURL('http://127.0.0.1:32400' + key)
@@ -104,12 +134,7 @@ class LiveChannels(object):
                     root.append(xml_programme) 
                     channel_number += channel_step
                     channel_index += 1
-            output = etree.tostring(root, pretty_print=True, encoding='UTF-8')
-            #Log(x_output)
-            header = '<?xml version="1.0" encoding="UTF-8"?>\n'        
-            header += '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
-            xml = header + output
-            return xml.replace('&#13;', '')
+            return root
         except Exception as e:
             Log('Exception : %s', e)
             Log(traceback.format_exc()) 
@@ -117,11 +142,11 @@ class LiveChannels(object):
             pass
    
     @classmethod
-    def make_recentAdd_from_section(cls, host, token, section_id, start_channel):
+    def make_recentAdd_from_section(cls, host, token, root, section_id, start_channel):
         # 채널당 하나의 파일
         try:
             section_title = base.get_section_title_from_id(section_id)
-            root = etree.Element('tv')
+            #root = etree.Element('tv')
             make_type = 'ONE_FILE_PER_CHANNEL'
             key = '/library/sections/%s/recentlyAdded' % section_id
             data = JSON.ObjectFromURL('http://127.0.0.1:32400' + key)
@@ -235,12 +260,15 @@ class LiveChannels(object):
                         root.append(xml_programme)
                         channel_number += channel_step
                         channel_index += 1
+            return channel_number
+            """
             output = etree.tostring(root, pretty_print=True, encoding='UTF-8')
             #Log(x_output)
             header = '<?xml version="1.0" encoding="UTF-8"?>\n'        
             header += '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
             xml = header + output
             return xml.replace('&#13;', '')
+            """
         except Exception as e:
             Log('Exception : %s', e)
             Log(traceback.format_exc()) 
@@ -248,22 +276,22 @@ class LiveChannels(object):
             pass
 
     @classmethod
-    def make_recentAdd_one_channel_from_section(cls, host, token, section_id, channel_no, count):
+    def make_recentAdd_one_channel_from_section(cls, host, token, root, section_id, channel_no, count):
         try:
             section_title = base.get_section_title_from_id(section_id)
-            root = etree.Element('tv')
+            #root = etree.Element('tv')
             key = '/library/sections/%s/recentlyAdded' % section_id
             data = JSON.ObjectFromURL('http://127.0.0.1:32400' + key)
             host = 'http://%s' % host
             token = '?X-Plex-Token=%s' % token
             #Log(data) 
             xml_channel = etree.Element('channel')
-            xml_channel.attrib['id'] = channel_no
+            xml_channel.attrib['id'] = '%s' % channel_no
             xml_channel.attrib['repeat-programs'] = 'true'
             xml_channel_name = etree.Element('display-name')
             xml_channel_name.text = section_title
             xml_channel_number = etree.Element('display-number')
-            xml_channel_number.text = channel_no
+            xml_channel_number.text = '%s' % channel_no
             xml_channel.append(xml_channel_name)
             xml_channel.append(xml_channel_number) 
             root.append(xml_channel)
@@ -282,7 +310,7 @@ class LiveChannels(object):
                     datetime_stop = datetime_start + timedelta(seconds=int(part['duration'])/1000+1)
                     xml_programme.attrib['start'] = '%s +0900' % datetime_start.strftime('%Y%m%d%H%M%S') 
                     xml_programme.attrib['stop'] = '%s +0900' % datetime_stop.strftime('%Y%m%d%H%M%S') 
-                    xml_programme.attrib['channel'] = channel_no
+                    xml_programme.attrib['channel'] = '%s' % channel_no
                     xml_programme.attrib['video-src'] = '%s%s%s' % (host, part['key'], token)
                     xml_programme.attrib['video-type'] = 'HTTP_PROGRESSIVE'
                     xml_programme_title = etree.Element('title')
@@ -305,11 +333,14 @@ class LiveChannels(object):
                 except Exception as e:
                     Log('Exception : %s', e)
                     Log(traceback.format_exc()) 
+            """
             output = etree.tostring(root, pretty_print=True, encoding='UTF-8')
             header = '<?xml version="1.0" encoding="UTF-8"?>\n'        
             header += '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
             xml = header + output
             return xml.replace('&#13;', '')
+            """
+            return 
         except Exception as e:
             Log('Exception : %s', e)
             Log(traceback.format_exc()) 

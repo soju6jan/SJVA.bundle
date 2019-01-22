@@ -3,6 +3,7 @@ import urllib
 import traceback
 import sys
 import time
+import subprocess
     
 import base
 from version import VERSION
@@ -51,7 +52,8 @@ def MainMenu():
             oc.add(DirectoryObject(key = Callback(MainMenu), title = unicode(m)))
         ACTION = [ 
             ['RESTART_SCAN_QUEUE', 'A-1. 스캔 정보 초기화'],
-            ['RELOAD_SECTION_LIST', 'A-2. 섹션 정보 다시 읽기'], 
+            ['RELOAD_SECTION_LIST', 'A-2. 섹션 정보 다시 읽기'],
+            ['VIEW_SECTION_LIST', 'A-3. 섹션 정보 확인'], 
             ['PLUG_IN_INSTALL', 'B-1. 플러그인 설치'], 
             ['SELF_UPDATE', 'B-2. 업데이트'], 
             ['SJVA_PMS_START', 'C-1. SJVA Server on PMS 시작'],
@@ -118,6 +120,17 @@ def Action(action_type):
     elif action_type == 'RELOAD_SECTION_LIST':
         base.load_section_list()
         message = '총 %s개의 라이브러리 폴더' % len(base.section_list)
+    elif action_type == 'VIEW_SECTION_LIST':
+        oc = ObjectContainer(title2=unicode('섹션 정보'))
+        for _ in base.section_list:
+            message=unicode('ID:[%s] 라이브러리명:[%s] PATH:[%s]' % (_['id'], _['title'], _['location']))
+            oc.add(
+                DirectoryObject(
+                    key = Callback(Label, message=message), 
+                    title=message,
+                )
+            )
+        return oc
     elif action_type == 'PLUG_IN_INSTALL':
         return Plugin()
     elif action_type == 'SELF_UPDATE':
@@ -192,13 +205,19 @@ def Action(action_type):
         ret = base.sql_command(0)
         if ret:
             message = '업데이트 하였습니다.'
-        else:
+        else: 
             message = '업데이트 에러'
     elif action_type == 'DB_CHANGE_SHOW_SCANNER':
         pass
     elif action_type == 'REBOOTING':
-        pass
-
+        if base.is_windows():
+            command = ['shutdown', '-r', '-f', '-t', '0']
+        else:
+            command = ['reboot']
+        #command = ['explorer']
+        Log('Command : %s', command) 
+        proc = subprocess.Popen(command)   
+        proc.communicate()
     return ObjectContainer(  
         title1 = unicode(L('Action')), 
         header = unicode(L('Action')),   
@@ -377,9 +396,9 @@ def lcone(sid, ch, count):
 def tvhm3u():
     return TVHeadend.tvhm3u(Request.Headers['host'], Request.Headers['X-Plex-Token'])
 
-@route('/tvhfile')
-def tvhfile(key):
-    return TVHeadend.tvhfile(key, Request.Headers['host'], Request.Headers['X-Plex-Token'])
+@route('/tvhurl')
+def tvhurl(key, streaming_type):
+    return TVHeadend.tvhurl(key, streaming_type, Request.Headers['host'], Request.Headers['X-Plex-Token'])
 
 ###############################################
 #From SJVA Server on PMS
@@ -389,4 +408,5 @@ def SJVA_START(version):
     SJVA_PMS.sjva_pms_process = SJVA_PMS.tmp_sjva_pms_process
     SJVA_PMS.version = version
     return json.dumps({'ret':'ok'}) 
+
 
