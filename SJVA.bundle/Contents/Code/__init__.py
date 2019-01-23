@@ -77,8 +77,8 @@ def MainMenu():
         ACTION = [ 
             ['STREAMING_REFRESH', 'D-1. TVH 채널 업데이트'],
             ['DB_SHOW_ADDED_BY_LAST_EPISODE', 'D-2. DB:쇼 추가 날짜를 최근 에피소드 추가 날짜로'],
-            ['DB_CHANGE_SHOW_SCANNER', 'D-3. DB:쇼 스캐너가 Default인 경우 Patch 스캐너로 변경'],
-            ['REBOOTING', 'D-4. 리부팅'],
+            #['DB_CHANGE_SHOW_SCANNER', 'D-3. DB:쇼 스캐너가 Default인 경우 Patch 스캐너로 변경'],
+            ['REBOOTING', 'D-3. 리부팅'],
         ] 
         for m in ACTION:
             oc.add(DirectoryObject(key = Callback(Action, action_type=m[0]), title = unicode(m[1])))
