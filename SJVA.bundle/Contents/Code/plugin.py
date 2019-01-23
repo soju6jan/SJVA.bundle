@@ -188,7 +188,11 @@ class PluginInstallThread(threading.Thread):
                     if move_or_copy == 'move':
                         shutil.move(src, dest) 
                     else:
-                        shutil.copy(src, dest) 
+                        if __name__ == '__main__':
+                            import distutils.dir_util
+                            distutils.dir_util.copy_tree(src, dest)
+                        else:
+                            shutil.copy(src, dest)
                     #shutil.rmtree(temp_path)
             elif self.data['type'] == 'scanner_show':
                 plex_root = os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH)))
