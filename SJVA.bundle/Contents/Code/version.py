@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-VERSION = '2019.01.23 05'
+VERSION = '2019.01.23 06'
 """
-Last Version : 2019.01.23 05
+Last Version : 2019.01.23 06
  
 <ChangeLog>
 2019.01.23 01
