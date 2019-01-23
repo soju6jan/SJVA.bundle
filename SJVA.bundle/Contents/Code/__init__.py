@@ -35,7 +35,8 @@ def init():
         base.filemanager.stop()
     base.scan_queue = ScanQueue()
     base.filemanager = FileManager()
-    base.load_section_list() 
+    base.load_section_list()
+    base.server()
 
 @handler(PREFIX, NAME, thumb = ICON)
 def MainMenu():
@@ -149,20 +150,17 @@ def Action(action_type):
         else:
             message = 'Not running!!'
     elif action_type == 'WATCHDOG_START':
-        Log('use_all_library : %s', base.get_setting('use_all_library'))
         flag_start = False
         count = 0
-        if base.get_setting('use_all_library') == False:
-            try:
-                watchdog_path = base.get_setting('watchdog_path')
-                for _ in watchdog_path.split('|'):
-                    SJVA_PMS.watchdog_start(-1, _)
-                    time.sleep(1)
-                    count += 1 
-                flag_start = True 
-            except:   
-                Log('use_all_library false exception')
-                Log(traceback.format_exc())  
+        try:
+            watchdog_path = base.get_setting('watchdog_path')
+            for _ in watchdog_path.split('|'):
+                SJVA_PMS.watchdog_start(-1, _)
+                time.sleep(1)
+                count += 1 
+            flag_start = True 
+        except:   
+            Log(traceback.format_exc())  
         if flag_start == False:
             for section in base.section_list:
                 SJVA_PMS.watchdog_start(section['id'], section['root'])

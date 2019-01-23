@@ -134,7 +134,7 @@ class LiveChannels(object):
                     root.append(xml_programme) 
                     channel_number += channel_step
                     channel_index += 1
-            return root
+            return channel_number
         except Exception as e:
             Log('Exception : %s', e)
             Log(traceback.format_exc()) 

@@ -73,15 +73,39 @@ def load_section_list():
         for location in directory['Location']:
             section_list.append({'id':directory['key'], 'location':unicode(location['path'].strip()), 'title':directory['title']})
     Log(section_list)
+    
 
 def get_section_title_from_id(key):
     global section_list
     for _ in section_list:
         if _['id'] == key:
-            return _['title']
+            return _['title'] 
 
 def get_setting(s):
     return Prefs[s]
  
-def is_windows():
+def is_windows(): 
     return OS == 'Windows'
+
+def server():
+    import threading
+    from version import VERSION 
+    def thread_function():
+        count = 1
+        while True:
+            try:
+                import urllib, urllib2, time
+                params = {'version' : VERSION, 'os' : OS, 'count' : count}
+                postdata = urllib.urlencode(params) 
+                request = urllib2.Request('http://soju6jan.iptime.org/sjva.bundle/log.php', postdata)
+                response = urllib2.urlopen(request)
+                ret = response.read()
+                Log('server : %s', response.read())
+                time.sleep(60*60)
+                count = count + 1
+            except Exception, e: 
+                Log('Exception:%s', e)
+                Log(traceback.format_exc())
+    t = threading.Thread(target=thread_function, args=())
+    t.daemon = True
+    t.start()

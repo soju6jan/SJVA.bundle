@@ -26,18 +26,18 @@ class TVHeadend(object):
     def init_list(cls):
         #if cls.streaming_list is None:
         cls.streaming_list = []
-        for _ in sample_key_list:
-            cls.streaming_list.append(Broadcast(_))
-            cls.streaming_list.append(Broadcast(_))
+        for key in sample_key_list:
+            cls.streaming_list.append(Broadcast(key))
+            cls.streaming_list.append(Broadcast(key))
         return len(cls.streaming_list)
 
     @classmethod
     def tvhurl(cls, key, streaming_type, host, token):
         if cls.streaming_list is None or len(cls.streaming_list) == 0:
             cls.init_list()
-        for _ in cls.streaming_list:
-            if _.key == key:
-                return Redirect(_.get_url(streaming_type, host, token))
+        for streaming in cls.streaming_list:
+            if streaming.key == key:
+                return Redirect(streaming.get_url(streaming_type, host, token))
     
 class Broadcast(object):
     def __init__(self, key):
@@ -77,10 +77,10 @@ class Broadcast(object):
             #duration은 ms   timestamp는 s.. 쿼리는 초
             offset = (time.time() - self.timestamp) * 1000 % self.total_duration
             tmp = 0
-            for _ in self.video_list:
-                Log('offset %s tmp %s duration %s', offset, tmp, _['duration'])
-                if offset + 5*1000 < tmp + _['duration']:
-                    url = 'http://%s/video/:/transcode/universal/start.m3u8?X-Plex-Platform=Chrome&mediaIndex=0&offset=%s&path=%s&X-Plex-Token=%s' % (host, ((offset-tmp)/1000-1), _['key'], token)
+            for video in self.video_list:
+                Log('offset %s tmp %s duration %s', offset, tmp, video['duration'])
+                if offset + 5*1000 < tmp + video['duration']:
+                    url = 'http://%s/video/:/transcode/universal/start.m3u8?X-Plex-Platform=Chrome&mediaIndex=0&offset=%s&path=%s&X-Plex-Token=%s' % (host, ((offset-tmp)/1000-1), video['key'], token)
                     Log(url)
                     return url
                 else:
@@ -88,7 +88,7 @@ class Broadcast(object):
         elif streaming_type == 'file':
             url = 'http://%s%s?X-Plex-Token=%s' % (host, self.video_list[self.file_index % len(self.video_list)]['file'], token)
             #Log(url)
-            self.file_index += 1
+            self.file_index = self.file_index + 1
             return url
 
         
