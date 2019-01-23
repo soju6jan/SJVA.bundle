@@ -84,7 +84,7 @@ class Broadcast(object):
                     Log(url)
                     return url
                 else:
-                    tmp = tmp + _['duration']
+                    tmp = tmp + video['duration']
         elif streaming_type == 'file':
             url = 'http://%s%s?X-Plex-Token=%s' % (host, self.video_list[self.file_index % len(self.video_list)]['file'], token)
             #Log(url)
