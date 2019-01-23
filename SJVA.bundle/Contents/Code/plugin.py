@@ -217,6 +217,9 @@ class PluginInstallThread(threading.Thread):
 
 # 지우지말것
 if __name__ == '__main__':
+    def Log(*arg, **args):
+        print arg
+        print args
     #with io.open('test', "w") as local_file:
     #    local_file.write(u'test')
     data = {}

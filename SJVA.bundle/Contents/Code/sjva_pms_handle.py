@@ -57,7 +57,8 @@ class SJVA_PMS(object):
             return data
         except Exception, e:  
             Log('Exception:%s', e) 
-            Log(traceback.format_exc())
+            Log('Known Error. not running SJVA Server on PMS')
+            #Log(traceback.format_exc())
             return None  
 
     @classmethod     
