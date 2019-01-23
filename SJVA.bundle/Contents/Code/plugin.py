@@ -173,16 +173,22 @@ class PluginInstallThread(threading.Thread):
                     else:
                         dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', zip_root.replace('-master', ''))
                         src = os.path.join(temp_path, zip_root)
+                    move_or_copy = 'move'
                     if self.data["identifier"] == "com.plexapp.plugins.SJVA":
-                        dest = os.path.dirname(dest)
+                        move_or_copy = 'copy'
+                        #dest = os.path.dirname(dest)
                     else:
                         if os.path.exists(dest):
                             try:
                                 shutil.rmtree(dest)
                             except:
-                                dest = os.path.dirname(dest)
+                                #dest = os.path.dirname(dest)
+                                move_or_copy = 'copy'
                                 pass
-                    shutil.move(src, dest) 
+                    if move_or_copy == 'move':
+                        shutil.move(src, dest) 
+                    else:
+                        shutil.copy(src, dest) 
                     #shutil.rmtree(temp_path)
             elif self.data['type'] == 'scanner_show':
                 plex_root = os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH)))
