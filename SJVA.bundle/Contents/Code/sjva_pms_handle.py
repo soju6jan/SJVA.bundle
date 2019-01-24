@@ -27,7 +27,9 @@ class SJVA_PMS(object):
             if base.is_windows():
                 cls.tmp_sjva_pms_process = subprocess.Popen(command, shell=True)
             else:
-                cls.tmp_sjva_pms_process = subprocess.Popen(command, shell=True, env={"PYTHONPATH": "."})  
+                cls.tmp_sjva_pms_process = subprocess.Popen(command, shell=True, env={"PYTHONIOENCODING":"utf-8", "PYTHONPATH": ".", "LANG":"en_US.UTF-8"}) 
+                # ANSI_X3.4-1968 sys.stdout.encodeing 
+                # LANG이 설정되어야..    
             Log('process :%s', cls.tmp_sjva_pms_process)  
         except Exception, e: 
             Log('Exception:%s', e)

@@ -23,7 +23,7 @@ class Watchdog(FileSystemEventHandler):
 
     def __init__(self, section_id, section_path):
         logger.debug('__init__')
-        logger.debug('ID:[%s] Path:[%s]', section_id, section_path)
+        logger.debug('ID:[%s] Path:[%s] %s', section_id, section_path, type(section_path))
         self.section_id = section_id
         if type(self.section_id) == type(u''):
             self.section_id = int(self.section_id)

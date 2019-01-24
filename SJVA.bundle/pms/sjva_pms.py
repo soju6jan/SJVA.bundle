@@ -181,5 +181,5 @@ if __name__ == '__main__':
             pms_global.app.run(host='0.0.0.0', port=pms_global.port, debug=False)
     except Exception, e:
         logger.debug('Exception:%s', e) 
-        logger.debug(traceback.format_exc())
+        logger.debug(traceback.format_exc()) 
 

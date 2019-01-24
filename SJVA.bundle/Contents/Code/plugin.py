@@ -86,14 +86,17 @@ class PluginHandle(object):
                 if base.is_windows():
                     proc = subprocess.Popen(command)
                 else:
-                    proc = subprocess.Popen(command, env={"PYTHONPATH": "."})
+                    #proc = subprocess.Popen(command, env={"PYTHONPATH": "."})
+                    proc = subprocess.Popen(command, env={"PYTHONIOENCODING":"utf-8", "PYTHONPATH": ".", "LANG":"en_US.UTF-8"})  
+                    # ANSI_X3.4-1968 sys.stdout.encodeing 
+                    # LANG이 설정되어야..    
                 proc.communicate()
             except Exception, e: 
                 Log('Exception:%s', e)
                 Log(traceback.format_exc())
         t = threading.Thread(target=thread_function, args=())
         #t.daemon = True
-        t.start()
+        t.start() 
         return 'OK'
 
     @classmethod
