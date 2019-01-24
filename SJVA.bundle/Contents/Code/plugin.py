@@ -81,15 +81,20 @@ class PluginHandle(object):
             try:
                 shutil.copyfile(THIS_FILE, DEST_FILE)
                 command = '"%s" "%s"' % (base.PYTHON, DEST_FILE)
-                Log('UPDATE %s',  command )
-                #shell true 파일쓰기 권한 없음.
+                Log('UPDATE2 %s',  command )
                 if base.is_windows():
+                    #shell true 파일쓰기 권한 없음.
                     proc = subprocess.Popen(command)
                 else:
                     #proc = subprocess.Popen(command, env={"PYTHONPATH": "."})
-                    proc = subprocess.Popen(command, env={"PYTHONIOENCODING":"utf-8", "PYTHONPATH": ".", "LANG":"en_US.UTF-8"})  
-                    # ANSI_X3.4-1968 sys.stdout.encodeing 
-                    # LANG이 설정되어야..    
+                    proc = subprocess.Popen(command, shell=True, env={"PYTHONIOENCODING":"utf-8", "PYTHONPATH": ".", "LANG":"en_US.UTF-8"})  
+                    """
+                    try:
+                        aaa = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, env={"PYTHONIOENCODING":"utf-8", "PYTHONPATH": ".", "LANG":"en_US.UTF-8"})  
+                    except subprocess.CalledProcessError as cpe:
+                        Log('!!!!!!!!!!!!!!!!!!!! %s', cpe.output.decode('cp949'))
+                        #Log('!!!!!!!!!!!!!!!!!!!! %s', cpe.output.decode('cp949')) #윈도우
+                    """
                 proc.communicate()
             except Exception, e: 
                 Log('Exception:%s', e)
