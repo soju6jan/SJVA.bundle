@@ -6,7 +6,10 @@ import subprocess
 import sys
 import threading
 
-sys.setdefaultencoding('utf-8')
+try:
+    sys.setdefaultencoding('utf-8')
+except:
+    Log('setdefaultencoding fail!!')
 
 OS = Platform.OS
 CURRENT_PATH = re.sub(r'^\\\\\?\\', '', os.getcwd())
