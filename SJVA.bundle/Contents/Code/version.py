@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '2019.01.24 01'
+VERSION = '2019.01.24 02'
 """
-Last Version : 2019.01.24 01
+Last Version : 2019.01.24 02
  
 <ChangeLog>
+2019.01.24 02
+ - 수동 시작시 print문 추가
+
 2019.01.23 01
    - 최초 릴리즈
 

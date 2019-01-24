@@ -113,7 +113,7 @@ def route_status():
 ###############################################################
 #  시작 & 종료
 ###############################################################
-def send_start_noti():
+def send_start_noti(flag_test):
     def threand_fuction():
         try:
             logger.debug('send_start_noti')
@@ -122,9 +122,10 @@ def send_start_noti():
             response = urllib2.urlopen(request) 
             data = response.read()
             logger.debug('send_start_noti : %s', data)
-        except Exception, e:  
-            logger.debug('Exception:%s', e) 
-            logger.debug(traceback.format_exc())
+        except Exception, e:
+            if flag_test == False:
+                logger.debug('Exception:%s', e) 
+                logger.debug(traceback.format_exc())
     t = threading.Thread(target=threand_fuction, args=())
     t.start()
     PLEX_DB.init()
@@ -164,14 +165,20 @@ if __name__ == '__main__':
             pms_global.port = int(sys.argv[1])
             pms_global.host = sys.argv[2]
             pms_global.token = sys.argv[3]
+            flag_test = False
         else:
             pms_global.port = 35400
             pms_global.host = '127.0.0.1:32400'
-            pms_global.token = 'gpKwA5mBgHNLTpyrRaVe'
-        send_start_noti()
+            pms_global.token = ''#'gpKwA5mBgHNLTpyrRaVe'
+            flag_test = True
+        
+        send_start_noti(flag_test)
         logger.debug(sys.argv)
         logger.debug('SJVA IN PMS Start on port : %s', pms_global.port)
-        pms_global.app.run(host='0.0.0.0', port=pms_global.port, debug=False)
+        if flag_test:
+            print 'Please run by plugin!!'
+        else:
+            pms_global.app.run(host='0.0.0.0', port=pms_global.port, debug=False)
     except Exception, e:
         logger.debug('Exception:%s', e) 
         logger.debug(traceback.format_exc())
