@@ -23,7 +23,8 @@ extension_list = ['webm', 'mkv', 'flv', 'vob', 'ogv', 'ogg', 'drc', 'gif', 'gifv
     'avi', 'mov', 'qt', 'wmv', 'yuv', 'rm', 'rmvb', 'asf', 'amv', 'mp4', 'm4p',
     'm4v', 'mpg', 'mp2', 'mpeg', 'mpe', 'mpv', 'm2v', 'm4v', 'svi', '3gp',
     '3g2', 'mxf', 'roq', 'nsv', 'f4v', 'f4p', 'f4a', 'f4b', 'mp3', 'flac', 'ts',
-    'srt', 'smi', 'ass', 'ssa', 'sami', 'usf', 'vtt', 'sub'
+    'srt', 'smi', 'ass', 'ssa', 'sami', 'usf', 'vtt', 'sub',
+    'heic', 'jpg', 
 ]
 
 

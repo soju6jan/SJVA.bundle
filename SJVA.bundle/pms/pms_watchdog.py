@@ -74,7 +74,7 @@ class Watchdog(FileSystemEventHandler):
             if tmps[1] == '':
                 logger.debug('IGNORE. %s no extension.', event.src_path)
                 return
-            elif tmps[1][1:] not in pms_global.extension_list:
+            elif tmps[1][1:].lower() not in pms_global.extension_list:
                 logger.debug('IGNORE. %s not in extension list.', event.src_path)
                 return
             p = event.src_path                

@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '2019.01.24 03'
+VERSION = '2019.02.07 01'
 """
-Last Version : 2019.01.24 03
+Last Version : 2019.02.07 01
  
 <ChangeLog>
+2019.02.07 01
+ - watchdog heic, jpg 확장자 추가
+
 2019.01.24 02
  - 리눅스 한글 처리 관련 버그 수정. 
  - 수동 시작시 print문 추가
