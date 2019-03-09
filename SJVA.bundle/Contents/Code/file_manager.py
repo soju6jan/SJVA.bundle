@@ -36,17 +36,23 @@ class FileManager(threading.Thread):
                 #Log('run...')
                 for _ in self.entity_list:
                     delta = datetime.datetime.now() - datetime.datetime.strptime(_.time_make, '%Y-%m-%d %H:%M:%S')
-                    if delta.days > 1:
+                    if delta.days > 1: 
                         self.entity_list.remove(_)
                     elif _.wait_status == 'READY_ADD':
                         if os.path.exists(_.filename):
                             Log(_.filename)
                             Log('SHOW_IN_FILELIST : %s', _.filename)
                             _.wait_status = 'SHOW_IN_FILELIST'
-                            t = FileSizeCheckThread()
-                            t.set_entity(self, _)
-                            t.daemon = True
-                            t.start()
+                            # 2019-03-10 폴더도 들어옴. (구글 폴더이동 이벤트)
+                            if os.path.isfile(_.filename):
+                                t = FileSizeCheckThread()
+                                t.set_entity(self, _)
+                                t.daemon = True
+                                t.start()
+                            else:
+                                # 폴더면 현 위치..
+                                _.directory = _.filename
+                                base.scan_queue.in_queue(_)
                         else:
                             Log(_.filename)
                             Log('file not exist : %s', _.status)

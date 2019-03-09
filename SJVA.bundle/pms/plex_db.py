@@ -38,6 +38,7 @@ class PLEX_DB(object):
         max_section_name = ''
         max_section_id = ''
         try:
+            #M:\MovieETC\무자막\
             for section in cls.section_list:
                 if filename.find(section[1]) != -1:
                     if len(max_section_name) < len(section[1]):

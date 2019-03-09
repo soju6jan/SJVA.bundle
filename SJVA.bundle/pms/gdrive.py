@@ -148,6 +148,10 @@ class GDrive(object):
         #GdrivePath:내 드라이브/Movie/해외/Blueray/2016/녹투라마 (2016)/nocturama.2016.limited.1080p.bluray.x264-usury.mkv
         
 
+    # 2019-03-10
+    # 예) 영화 내부파일을 정리하고 라이브러리 폴더를 옮길 때, 이럴 경우에는 폴더의 이벤트만 오지
+    # 파일의 이벤트는 처리하지 않고 있다.
+    # 폴더도 처리
     def start_change_watch(self):
         def thread_function():
             store = Storage(os.path.join(os.path.dirname(__file__), '%s.json' % self.gdrive_name))
@@ -193,8 +197,13 @@ class GDrive(object):
                             #fileid = _['fileId']
                             continue
                         else:
-                            if 'file' in _ and not _['file']['mimeType'].startswith('video'):
-                                continue
+                            if 'file' in _:
+                                if _['file']['mimeType'] == 'application/vnd.google-apps.folder':
+                                    logger.debug('FOLDER')
+                                elif _['file']['mimeType'].startswith('video'):
+                                    logger.debug('FILE')
+                                else:
+                                    continue
                             fileid = _['file']['id']
                             #삭제시에는 inqueue.. 바로 반영이 될까? RemoveWaitFile만들자
                             #일반적일때는 addwait?                    
