@@ -51,6 +51,7 @@ class FileManager(threading.Thread):
                                 t.start()
                             else:
                                 # 폴더면 현 위치..
+                                entity.wait_status = 'REAL_ADD'
                                 _.directory = _.filename
                                 base.scan_queue.in_queue(_)
                         else:

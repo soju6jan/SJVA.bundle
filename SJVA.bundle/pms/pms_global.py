@@ -12,6 +12,8 @@ PLEX_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__fi
 DB_FILE = os.path.join(PLEX_ROOT, 'Plug-in Support', 'Databases', 'com.plexapp.plugins.library.db')
 
 post = None
+#host = '127.0.0.1:32400'
+#token = 'nPGFrj6p8sWzuNNgasYW'
 host = None
 token = None
 watchdog_list = []

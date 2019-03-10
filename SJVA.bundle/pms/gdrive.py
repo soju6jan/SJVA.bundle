@@ -144,6 +144,7 @@ class GDrive(object):
         self.api_call_inverval = 5
         self.flag_thread_run = True
         self.thread = None
+        self.gdrive_service = None
         #self.match_rule = ['[영화']
         #GdrivePath:내 드라이브/Movie/해외/Blueray/2016/녹투라마 (2016)/nocturama.2016.limited.1080p.bluray.x264-usury.mkv
         
@@ -160,8 +161,8 @@ class GDrive(object):
                 #flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
                 #creds = tools.run_flow(flow, store)
                 return -1
-            gdrive_service = build('drive', 'v3', http=creds.authorize(Http()))
-            results = gdrive_service.changes().getStartPageToken().execute()
+            self.gdrive_service = build('drive', 'v3', http=creds.authorize(Http()))
+            results = self.gdrive_service.changes().getStartPageToken().execute()
             page_token = results['startPageToken']
             logger.debug('startPageToken:%s', page_token)
 
@@ -173,7 +174,7 @@ class GDrive(object):
                         if self.flag_thread_run == False:
                             return
                         time.sleep(1)
-                    results = gdrive_service.changes().list(
+                    results = self.gdrive_service.changes().list(
                         pageToken=page_token,
                         fields= "changes( \
                                     file( \
@@ -190,12 +191,23 @@ class GDrive(object):
                     items = results.get('changes', [])
                     for _ in items:
                         logger.debug('1.CHANGE : %s', _)
-                        # mimeType
-                        type_add_remove = 'ADD'
+                        
+                        # 2019-03-10 변경시에는 2개를 보내야 한다.
+                        is_add = True
+                        is_file = True
                         if _['removed'] == True:
-                            type_add_remove = 'REMOVE'
-                            #fileid = _['fileId']
-                            continue
+                            is_add = False
+                            fileid = _['fileId']
+                            if fileid in self.cache:
+                                file_meta = {
+                                    'name' : self.cache[fileid]['name'],
+                                    'parents' : self.cache[fileid]['parents'],
+                                    #'mimeType' : self.cache[fileid]['mimeType'],
+                                }
+                                file_meta['mimeType'] = self.cache[fileid]['mimeType'] if 'mimeType' in self.cache else 'application/vnd.google-apps.folder'
+                            else:
+                                logger.debug('remove. not cache')
+                                continue
                         else:
                             if 'file' in _:
                                 if _['file']['mimeType'] == 'application/vnd.google-apps.folder':
@@ -208,50 +220,81 @@ class GDrive(object):
                             #삭제시에는 inqueue.. 바로 반영이 될까? RemoveWaitFile만들자
                             #일반적일때는 addwait?                    
                             #logger.debug(u'{0} ({1})'.format(_['file']['name'], _['file']['id']).encode('cp949'))
-                        file_meta = gdrive_service.files().get(
-                            fileId=fileid, fields="id,mimeType, modifiedTime,name,parents,trashed"
-                            ).execute()
-                        logger.debug('2.FILEMETA:%s' % file_meta)
-                    
-                        file_paths = [file_meta['name']]
-                        # 단일 부모만 처리..
-                        # 루트 가능함.
-                        parents = file_meta['parents']
 
-                        while parents is not None:
-                            parent_id = parents[0]
-                            logger.debug('parent_id:%s', parent_id)
-                            if parent_id not in self.cache:
-                                parent_result = gdrive_service.files().get(
-                                    fileId=parent_id, fields="id,mimeType, modifiedTime, name, parents, trashed"
-                                ).execute()
-                                #print parent_result #application/vnd.google-apps.folder
-                                logger.debug('parent_result:%s', parent_result)
-                                self.cache[parent_id] = {'name': parent_result['name'], 'parents': parent_result['parents'] if 'parents' in parent_result else None}
-                            file_paths.insert(0, self.cache[parent_id]['name'])
-                            logger.debug('file_paths:%s', file_paths)
-                            parents = self.cache[parent_id]['parents']
-                            logger.debug('parents:%s', parents)
-                        gdrivepath = '/'.join(file_paths)
-                        logger.debug('3.GdrivePath:%s' % gdrivepath)
-                        mount_abspath = self.get_mount_abspath(file_paths)
-                        logger.debug('4.MountPath:%s' % mount_abspath)
-                        s_id = PLEX_DB.get_section_id(mount_abspath)
-                        if s_id == -1:
-                            logger.debug('5-2.IGNORE. %s file section_id is -1.', mount_abspath)
-                        else:
-                            if PLEX_DB.is_exist_in_library(mount_abspath) == False:
-                                pms_global.send_command(s_id, mount_abspath, type_add_remove, 'GDRIVE')
-                                logger.debug('5-1.Send Command %s %s %s', s_id, mount_abspath, type_add_remove )
+                            file_meta = self.gdrive_service.files().get(
+                                fileId=fileid, fields="id,mimeType, modifiedTime,name,parents,trashed"
+                            ).execute()
+
+                        if file_meta['mimeType'] == 'application/vnd.google-apps.folder':
+                            is_file = False
+                        
+                        logger.debug('IS_ADD : %s IS_FILE :%s', is_add, is_file)
+                        job_list = []
+
+                        if is_add and is_file:
+                            job_list = [[file_meta, 'ADD']]
+                        elif is_add and not is_file:
+                            job_list = [[file_meta, 'ADD']]
+                            #폴더 변경
+                            if fileid in self.cache:
+                                remove_file_meta = {
+                                    'name' : self.cache[fileid]['name'],
+                                    'parents' : self.cache[fileid]['parents'],
+                                    #'mimeType' : self.cache[fileid]['mimeType'],
+                                }
+                                remove_file_meta['mimeType'] = self.cache[fileid]['mimeType'] if 'mimeType' in self.cache else 'application/vnd.google-apps.folder'
+                                job_list.insert(0, [remove_file_meta, 'REMOVE'])
+                        elif not is_add and is_file:
+                            job_list = [[file_meta, 'REMOVE']]
+                        elif not is_add and not is_file:
+                            job_list = [[file_meta, 'REMOVE']]                                              
+
+                        for job in job_list:      
+                            file_meta = job[0]
+                            type_add_remove = job[1]
+
+                            logger.debug('2.FILEMETA:%s' % file_meta)
+                            file_paths = self.get_parent(file_meta)
+
+                            gdrivepath = '/'.join(file_paths)
+                            logger.debug('3.GdrivePath:%s' % gdrivepath)
+                            mount_abspath = self.get_mount_abspath(file_paths)
+                            logger.debug('4.MountPath:%s' % mount_abspath)
+                            
+                            s_id = PLEX_DB.get_section_id(mount_abspath)
+                            if s_id == -1:
+                                logger.debug('5-2.IGNORE. %s file section_id is -1.', mount_abspath)
                             else:
-                                logger.debug('5-3.IGNORE. already in library')
-                        logger.debug('6.File process end.. WAIT :%s', self.api_call_inverval)
-                        for _ in range(self.api_call_inverval):
-                            #logger.debug('%s %s', self.gdrive_name, _)
-                            if self.flag_thread_run == False:
-                                return
-                            time.sleep(1)
-                        logger.debug('7.AWAKE Continue')
+                                # 삭제나 변경을 위해서다. 
+                                if is_add:
+                                    self.cache[fileid] = {
+                                        'name': file_meta['name'], 
+                                        'parents': file_meta['parents'],
+                                        'mimeType' : file_meta['mimeType']
+                                    }
+                                else:
+                                    self.cache[fileid] = None
+                                if is_add and not is_file:
+                                    try:
+                                        if not os.listdir(mount_abspath):
+                                            logger.debug('5. IS EMPTY!!')
+                                            continue
+                                    except:
+                                        logger.debug('os.listdir exception!')
+                                        pass
+                                        
+                                if PLEX_DB.is_exist_in_library(mount_abspath) == False:
+                                    pms_global.send_command(s_id, mount_abspath, type_add_remove, 'GDRIVE')
+                                    logger.debug('5-1.Send Command %s %s %s', s_id, mount_abspath, type_add_remove )
+                                else:
+                                    logger.debug('5-3.IGNORE. already in library')
+                            logger.debug('6.File process end.. WAIT :%s', self.api_call_inverval)
+                            for _ in range(self.api_call_inverval):
+                                #logger.debug('%s %s', self.gdrive_name, _)
+                                if self.flag_thread_run == False:
+                                    return
+                                time.sleep(1)
+                            logger.debug('7.AWAKE Continue')
                 except Exception, e:
                     logger.debug('Exception:%s', e)
                     logger.debug(traceback.format_exc())    
@@ -293,6 +336,29 @@ class GDrive(object):
             logger.debug('Exception:%s', e)
             logger.debug(traceback.format_exc())
 
+    def get_parent(self, file_meta):
+        file_paths = [file_meta['name']]
+        parents = file_meta['parents']
+        while parents is not None:
+            parent_id = parents[0]
+            logger.debug('parent_id:%s', parent_id)
+            if parent_id not in self.cache:
+                parent_result = self.gdrive_service.files().get(
+                    fileId=parent_id, fields="id,mimeType, modifiedTime, name, parents, trashed"
+                ).execute()
+                #print parent_result #application/vnd.google-apps.folder
+                logger.debug('parent_result:%s', parent_result)
+                self.cache[parent_id] = {
+                    'name': parent_result['name'], 
+                    'parents': parent_result['parents'] if 'parents' in parent_result else None,
+                    'mimeType' : parent_result['mimeType']
+                }
+            file_paths.insert(0, self.cache[parent_id]['name'])
+            logger.debug('    file_paths:%s', file_paths)
+            parents = self.cache[parent_id]['parents']
+            logger.debug('    parents:%s', parents)
+        return file_paths
+
     def stop(self):
         logger.debug('Gdrive stop function start..: %s %s ', self.gdrive_name, self.thread.isAlive())
         self.flag_thread_run = False
@@ -300,8 +366,15 @@ class GDrive(object):
         logger.debug('Gdrive stop function end..: %s %s', self.gdrive_name, self.thread.isAlive())
 
 if __name__ == '__main__':
+    match_rule = 'soju6janw:내 드라이브,M:'
+    gdrive = GDrive(match_rule)
+    gdrive.start_change_watch()
+    gdrive.thread.join()
+
+
     if len(sys.argv) == 1:
         sys.argv = [sys.argv[0], 'token', 'test']
+    
     if len(sys.argv) == 3:
         name = sys.argv[2]
         token_filename = os.path.join(os.path.dirname(__file__), '%s.json' % name)        

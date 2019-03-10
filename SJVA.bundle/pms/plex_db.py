@@ -34,6 +34,8 @@ class PLEX_DB(object):
 
     @classmethod
     def get_section_id(cls, filename):
+        #if not cls.section_list:
+        #    cls.init()
         #Movie Movie4K 
         max_section_name = ''
         max_section_id = ''
