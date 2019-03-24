@@ -154,6 +154,17 @@ class GDrive(object):
     # 파일의 이벤트는 처리하지 않고 있다.
     # 폴더도 처리
     def start_change_watch(self):
+        def get_start_page_token(creds):
+            try:
+                self.gdrive_service = build('drive', 'v3', http=creds.authorize(Http()))
+                results = self.gdrive_service.changes().getStartPageToken().execute()
+                page_token = results['startPageToken']
+                logger.debug('startPageToken:%s', page_token)
+                return page_token
+            except Exception, e:
+                logger.debug('Exception:%s', e)
+                logger.debug(traceback.format_exc())    
+
         def thread_function():
             store = Storage(os.path.join(os.path.dirname(__file__), '%s.json' % self.gdrive_name))
             creds = store.get()
@@ -161,10 +172,8 @@ class GDrive(object):
                 #flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
                 #creds = tools.run_flow(flow, store)
                 return -1
-            self.gdrive_service = build('drive', 'v3', http=creds.authorize(Http()))
-            results = self.gdrive_service.changes().getStartPageToken().execute()
-            page_token = results['startPageToken']
-            logger.debug('startPageToken:%s', page_token)
+
+            page_token = get_start_page_token(creds)
 
             while self.flag_thread_run:
                 try:
@@ -295,9 +304,14 @@ class GDrive(object):
                                     return
                                 time.sleep(1)
                             logger.debug('7.AWAKE Continue')
+                except TypeError:
+                    page_token = get_start_page_token(creds)
+                    logger.debug('TYPE ERROR !!!!!!!!!!!!!!!!!!!!')    
                 except Exception, e:
                     logger.debug('Exception:%s', e)
                     logger.debug(traceback.format_exc())    
+
+                    
 
         self.thread = threading.Thread(target=thread_function, args=())
         self.thread.daemon = True
