@@ -144,9 +144,16 @@ class ScanThread(threading.Thread):
                 tmp = self.entity.directory.encode('cp949') if base.is_windows() else self.entity.directory
                 command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', tmp]
                 proc = subprocess.Popen(command)   
-                proc.communicate()
-                Log('스캔 시작')
-                proc.wait()
+                try:
+                    #proc.communicate(timeout=10*60) 
+                    proc.wait()
+                except Exception as e:
+                    Log('EXCEPTION:::: %s', e)
+                    proc.kill() 
+                    #outs, errs = proc.communicate()
+                
+                #Log('스캔 시작')
+                #proc.wait()
                 Log('스캔 종료')
                 if base.get_setting('use_recent_episode_at_show_dated'):
                     result = base.sql_command(0) 
