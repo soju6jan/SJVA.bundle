@@ -166,8 +166,9 @@ class ScanThread(threading.Thread):
                 Log('CALLBACK HOST:%s', host) 
                 for _ in host:
                     try:
-                        url = 'http://%s/api/scan_complete' % _
-                        params = { 'filename' : self.entity.filename, 'idx' : self.entity.callback_id }
+                        #url = 'http://%s/api/scan_complete' % _
+                        url = _
+                        params = { 'filename' : self.entity.filename, 'id' : self.entity.callback_id }
                         postdata = urllib.urlencode( params ) 
                         request = urllib2.Request(url, postdata)
                         response = urllib2.urlopen(request)
