@@ -49,9 +49,10 @@ def sql_command(sql_type, arg1=''):
             sql = "SELECT count(*) FROM media_parts WHERE file LIKE '%%%s%%'" % arg1
         command = [SQLITE3, DB, sql]
         Log('Command : %s', command) 
-        proc = subprocess.Popen(command)   
-        proc.communicate()
-        return True 
+        #proc = subprocess.Popen(command)
+        p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
+        out, err = p.communicate()
+        return True, out.strip()
     except Exception, e: 
         Log('Exception:%s', e)
         Log(traceback.format_exc())

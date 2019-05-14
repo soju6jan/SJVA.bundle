@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-VERSION = '2019.05.12 01'
+VERSION = '2019.05.15 01'
 """
-Last Version : 2019.05.12 01
+Last Version : 2019.05.15 01
  
 <ChangeLog>
-2019.05.12 01
+2019.05.15 01
  - SJVA 연동 function 수정
  
 2019.03.10 02

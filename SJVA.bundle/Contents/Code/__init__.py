@@ -14,6 +14,7 @@ from sjva_pms_handle import SJVA_PMS
 from plugin import PluginHandle
 from lc import LiveChannels
 from tvh import TVHeadend
+import unicodedata
 
 NAME = 'SJVA' 
 PREFIX = '/video/SJVA'  
@@ -200,7 +201,7 @@ def Action(action_type):
         ret = TVHeadend.init_list()
         message = '%s개 채널 업데이트' % ret
     elif action_type == 'DB_SHOW_ADDED_BY_LAST_EPISODE':
-        ret = base.sql_command(0)
+        ret, log = base.sql_command(0)
         if ret:
             message = '업데이트 하였습니다.'
         else: 
@@ -388,10 +389,22 @@ def lcone(sid, ch, count):
     Response.Headers['Content-Type'] = 'application/xml; charset=utf-8"'
     return LiveChannels.get_xml_one(Request.Headers['host'], Request.Headers['X-Plex-Token'], sid, ch, count)
 
+@route('/in_library')
+def in_library(filename):
+    try:
+        filename = unicodedata.normalize('NFKC', unicode(filename))
+        Log('in_library [%s]', filename)    
+        ret, log = base.sql_command('SELECT_FILENAME', filename)
+        return log
+    except Exception, e: 
+        Log('Exception:%s', e)
+        Log(traceback.format_exc())
+        return -1
+
 ### TVH
 #http://%s/:/plugins/com.plexapp.plugins.SJVA/function/tvhm3u?X-Plex-Token=%s
 @route('/tvhm3u')
-def tvhm3u():
+def tvhm3u(): 
     return TVHeadend.tvhm3u(Request.Headers['host'], Request.Headers['X-Plex-Token'])
 
 @route('/tvhurl')
