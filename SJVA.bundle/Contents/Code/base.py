@@ -48,7 +48,7 @@ def sql_command(sql_type, arg1=''):
             sql = 'SELECT library_section_id, root_path FROM section_locations'
             command = [SQLITE3, DB, sql]
         elif sql_type == 'SELECT_FILENAME':
-            sql = u"SELECT count(*) FROM media_parts WHERE file LIKE '%%%s%%'" % arg1
+            sql = u"SELECT count(*) FROM media_parts WHERE file LIKE '%%%s%%';" % arg1
             from io import open
             with open("select.sql", "wb") as output:
                 output.write(sql)
