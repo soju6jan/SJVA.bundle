@@ -389,11 +389,11 @@ def lcone(sid, ch, count):
     Response.Headers['Content-Type'] = 'application/xml; charset=utf-8"'
     return LiveChannels.get_xml_one(Request.Headers['host'], Request.Headers['X-Plex-Token'], sid, ch, count)
 
-@route('/in_library')
-def in_library(filename):
+@route('/count_in_library')
+def count_in_library(filename):
     try:
         filename = unicodedata.normalize('NFKC', unicode(filename))
-        Log('in_library [%s]', filename)    
+        Log('count_in_library [%s]', filename)    
         ret, log = base.sql_command('SELECT_FILENAME', filename)
         return log
     except Exception, e: 

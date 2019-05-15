@@ -43,11 +43,16 @@ def sql_command(sql_type, arg1=''):
     try:
         if sql_type == 0:
             sql = 'update metadata_items set added_at = (select max(added_at) from metadata_items mi where mi.parent_id = metadata_items.id or mi.parent_id in(select id from metadata_items mi2 where mi2.parent_id = metadata_items.id)) where metadata_type = 2'
+            command = [SQLITE3, DB, sql]
         elif sql_type == 1:
             sql = 'SELECT library_section_id, root_path FROM section_locations'
+            command = [SQLITE3, DB, sql]
         elif sql_type == 'SELECT_FILENAME':
-            sql = "SELECT count(*) FROM media_parts WHERE file LIKE '%%%s%%'" % arg1
-        command = [SQLITE3, DB, sql]
+            sql = u"SELECT count(*) FROM media_parts WHERE file LIKE '%%%s%%'" % arg1
+            from io import open
+            with open("select.sql", "wb") as output:
+                output.write(sql)
+            command = [SQLITE3, DB, '.read select.sql']
         Log('Command : %s', command) 
         #proc = subprocess.Popen(command)
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)

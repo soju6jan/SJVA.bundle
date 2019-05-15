@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-VERSION = '2019.05.15 01'
+VERSION = '2019.05.15 02'
 """
-Last Version : 2019.05.15 01
+Last Version : 2019.05.15 02
  
 <ChangeLog>
-2019.05.15 01
+2019.05.15 02
+ - count_in_library 추가
  - SJVA 연동 function 수정
  
 2019.03.10 02
