@@ -393,13 +393,17 @@ def lcone(sid, ch, count):
 def count_in_library(filename):
     try:
         filename = unicodedata.normalize('NFKC', unicode(filename))
-        Log('count_in_library [%s]', filename)    
-        ret, log = base.sql_command('SELECT_FILENAME', filename)
-        return log
+        
     except Exception, e: 
         Log('Exception:%s', e)
-        Log(traceback.format_exc())
-        return -1
+        #Log(traceback.format_exc())
+        try:  
+            filename = urllib.unquote(filename).decode('euc-kr')
+        except UnicodeDecodeError:  
+            filename = urllib.unquote(filename)
+    ret, log = base.sql_command('SELECT_FILENAME', filename)
+    Log('count_in_library [%s] %s', filename, log)
+    return log
 
 ### TVH
 #http://%s/:/plugins/com.plexapp.plugins.SJVA/function/tvhm3u?X-Plex-Token=%s
