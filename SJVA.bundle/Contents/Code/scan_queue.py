@@ -51,32 +51,42 @@ class ScanQueue(object):
 
     def scan_queue_thread(self):
         while self.flag_stop == False:
-            Log('* 스캔 큐 대기 : %s', self.scan_queue.qsize())
-            self.current_scan_entity = self.scan_queue.get()
-            # 초기화
-            if self.current_scan_entity is None:
-                return
-            Log('* 스캔 큐 AWAKE : %s', self.current_scan_entity.filename)
-            self.current_scan_entity.status = 'SCAN_START' 
-            
-            self.current_scan_entity.scan_start_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            Log('* 스캔 큐 scan_start_time : %s', self.current_scan_entity.scan_start_time)
-            
-            #self.scan_start(self.current_scan_entity)
-            self.current_scan_t = ScanThread()
-            self.current_scan_t.set(self.current_scan_entity, self.wait_event)
-            self.current_scan_t.start()
-            Log('* 스캔 큐 thread 종료 대기')
-            self.wait_event.wait()
-            self.current_scan_t = None
-            # 초기화 한번 체크
-            if self.flag_stop: return
-            self.current_scan_entity.status = 'SCAN_COMPLETED' 
-            self.current_scan_entity.scan_end_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            self.scan_queue.task_done()
-            Log('* 남은 큐 사이즈 : %s', self.scan_queue.qsize())
-            self.current_scan_entity = None
-            time.sleep(2) 
+            try:
+                Log('* 스캔 큐 대기 : %s', self.scan_queue.qsize())
+                self.current_scan_entity = self.scan_queue.get()
+                # 초기화
+                if self.current_scan_entity is None:
+                    return
+                Log('* 스캔 큐 AWAKE : %s', self.current_scan_entity.filename)
+                self.current_scan_entity.status = 'SCAN_START' 
+                
+                self.current_scan_entity.scan_start_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                Log('* 스캔 큐 scan_start_time : %s', self.current_scan_entity.scan_start_time)
+                
+                #self.scan_start(self.current_scan_entity)
+                self.current_scan_t = ScanThread()
+                self.current_scan_t.set(self.current_scan_entity, self.wait_event)
+                self.current_scan_t.start()
+                Log('* 스캔 큐 thread 종료 대기')
+                #self.wait_event.wait()
+                self.current_scan_t.join(60*10)
+                if self.current_scan_t.is_alive():
+                    Log('* 스캔 큐 still Alive')
+                    self.current_scan_t.process.terminate()
+                    self.current_scan_t.join()
+                Log('process returncode %s', self.current_scan_t.process.returncode)
+
+                self.current_scan_t = None
+                # 초기화 한번 체크
+                if self.flag_stop: return
+                self.current_scan_entity.status = 'SCAN_COMPLETED' 
+                self.current_scan_entity.scan_end_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                self.scan_queue.task_done()
+                Log('* 남은 큐 사이즈 : %s', self.scan_queue.qsize())
+                self.current_scan_entity = None
+                time.sleep(2) 
+            except:
+                Log(traceback.format_exc())
     """
     def add(self, section_id, filename):
         entity = EntityScan(1, section_id, filename, None, None)
@@ -129,6 +139,7 @@ class ScanQueue(object):
 class ScanThread(threading.Thread):
     entity = None
     wait_event = None
+    process = None
     
     def set(self, entity, wait_event):
         self.entity = entity
@@ -143,13 +154,13 @@ class ScanThread(threading.Thread):
                 #command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', self.entity.directory.encode('cp949')]
                 tmp = self.entity.directory.encode('cp949') if base.is_windows() else self.entity.directory
                 command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', tmp]
-                proc = subprocess.Popen(command)   
+                self.process = subprocess.Popen(command)   
                 try:
                     #proc.communicate(timeout=10*60) 
-                    proc.wait()
+                    self.process.wait()
                 except Exception as e:
                     Log('EXCEPTION:::: %s', e)
-                    proc.kill() 
+                    self.process.kill() 
                     #outs, errs = proc.communicate()
                 
                 #Log('스캔 시작')
