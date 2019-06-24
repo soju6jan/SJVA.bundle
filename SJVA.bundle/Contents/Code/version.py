@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
-VERSION = '2019.05.19 01'
+VERSION = '0.1.4.5'
 """
-Last Version : 2019.05.19 01
+Last Version : 0.1.4.5
  
 <ChangeLog>
+0.1.4.5 (2019-06-24)
+- SJVA 버전과 통일
+- 윈도우 '보좌관 – 세상을' 스캔 안되는 문제 대응 
+
 2019.05.19 01
  - scan_queue thread 로직 수정
 

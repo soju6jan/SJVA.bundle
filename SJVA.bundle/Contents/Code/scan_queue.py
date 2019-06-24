@@ -106,7 +106,8 @@ class ScanQueue(object):
             if entity.section_id is None or entity.section_id == '':
                 for _ in base.section_list: 
                     if entity.filename.find(_['location']) != -1:
-                        entity.section_id = _['id']  
+                        #entity.section_id = _['id']
+                        entity.section_id = str(int(_['id']))
                         break 
                 if entity.section_id is None or entity.section_id == '':
                     entity.status = 'NO_LIBRARY'  
@@ -152,8 +153,40 @@ class ScanThread(threading.Thread):
                 #command = '"%s" --scan --refresh --section %s --directory "%s"' % (base.SCANNER, self.entity.section_id, self.entity.directory.encode('cp949'))
                 #command = '"%s" --scan --refresh --section %s' % (base.SCANNER, self.entity.section_id)
                 #command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', self.entity.directory.encode('cp949')]
-                tmp = self.entity.directory.encode('cp949') if base.is_windows() else self.entity.directory
+                Log(self.entity.directory)
+                Log([self.entity.directory])
+                Log(type(self.entity.directory))
+                #Log(base.is_windows())
+                # 2019-06-24
+                # 유니코드로 popen까지는 문제없으나, 스캐너 프로그램이 처리를 못하는 것으로 판단된다.
+                # 무조건 인코딩해서 전달해야하는데, 보좌관 - 이걸 전달할 수가 없다.
+                # 윈도우 utf8도 안된다.................
+                # 무조건 cp949로 인코딩해야한다....................................
+                try:
+                    tmp = self.entity.directory.encode('cp949') if base.is_windows() else self.entity.directory
+                except UnicodeEncodeError as ue:
+                    Log('UnicodeEncodeError 1')
+                    # 보좌관 – 세상을 움직이는 사람들 시즌1.
+                    # - 아님. 
+                    # UnicodeEncodeError: 'cp949' codec can't encode character u'\u2013' in position 14: illegal multibyte sequence
+                    try:
+                        tmp = os.path.dirname(self.entity.directory).encode('cp949')
+                        #self.entity.directory
+                        #tmp = self.entity.directory.encode('utf8')
+                        #Log('cp949 error!!!')
+                        #Log(type(self.entity.directory))
+                        #import re
+                        #match = re.compile(r'UnicodeEncodeError: \'cp949\' (.*?)in position (?P<pos>\d+)').match(str(ue))
+                        #if match:
+                        #    Log('regex match')
+                        #    pos = int(match.group('pos'))
+                        #    tmp = self.entity.directory[:pos-1].encode('cp949')
+                    except Exception as e:
+                        Log('EXCEPTION22:::: %s', e)
+                        tmp = self.entity.directory
+
                 command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', tmp]
+                Log(command)
                 self.process = subprocess.Popen(command)   
                 try:
                     #proc.communicate(timeout=10*60) 
