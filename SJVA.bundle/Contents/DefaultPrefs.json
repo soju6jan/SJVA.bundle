@@ -7,6 +7,19 @@
 		"default": "False"
 	},
 	{
+		"id": "use_scan_filename_change_rule",
+		"label": "스캔명령 수신시 경로 변경 규칙 사용",
+		"type": "bool",
+		"option": "False",
+		"default": "False"
+	},
+	{
+		"id": "scan_filename_change_rule",
+		"label": "변경규칙. 형식:[수신패스],[변경패스]|[수신패스],[변경패스]... 예)Z:,/volume1/video|P:,/volume1/gdrive(윈도우경로 => 리눅스경로)",
+		"type": "text",
+		"default": ""
+	},
+	{
 		"id": "sjva_pms_port",
 		"label": "SJVA Server on PMS Port",
 		"type": "text",

@@ -86,7 +86,8 @@ class EntityScan(object):
             ret += '(R)'            
         elif self.wait_status == 'SHOW_IN_FILELIST':
             ret += '(E)'            
-        
+        elif self.wait_status == 'WRONG_PATH':
+            ret = '[WRONG_PATH]'
         
         return ret
 

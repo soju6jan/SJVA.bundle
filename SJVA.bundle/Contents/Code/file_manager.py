@@ -65,11 +65,15 @@ class FileManager(threading.Thread):
                             Log(_.filename)
                             _.wait_status = 'REAL_REMOVE'
                             ret = base.scan_queue.in_queue(_)
+                    elif _.wait_status == 'WRONG_PATH':
+                        self.entity_list.remove(_)
             except Exception, e:
                 Log('Exception:%s', e)
                 Log(traceback.format_exc())
 
     def add(self, section_id, filename, callback, callback_id, type_add_remove, call_from):
+        # 2019-06-24
+        filename = self.get_change_filename(filename)
         entity = EntityScan(section_id, filename, callback, callback_id, call_from)
         if type_add_remove == 'ADD':
             entity.wait_status = 'READY_ADD'
@@ -82,6 +86,12 @@ class FileManager(threading.Thread):
         #if ret is not None:
         #    if ret.strip() != '':
         #        return 'ALREADY_IN_LIBRARY'
+        if base.is_windows():
+            if filename[0] == '/':
+                entity.wait_status = 'WRONG_PATH'
+        else:
+            if filename[0] != '/':
+                entity.wait_status = 'WRONG_PATH'
         self.entity_list.append(entity)
         return 'ADD_OK'
     
@@ -89,6 +99,29 @@ class FileManager(threading.Thread):
         entity.wait_status = 'REAL_ADD'
         ret = base.scan_queue.in_queue(entity)
         #time.sleep(1)
+    
+    def get_change_filename(self, filename):
+        try:
+            if base.get_setting('use_scan_filename_change_rule'):
+                rule_string = base.get_setting('scan_filename_change_rule')
+                rules = [x.strip() for x in rule_string.split('|')]
+                for rule in rules:
+                    source, target = [x.strip() for x in rule.split(',')]
+                    if filename.startswith(source):
+                        ret = filename.replace(source, target)
+                        if target[0] == '/':
+                            ret = ret.replace('\\', '/')
+                        else:
+                            ret = ret.replace('/', '\\')
+                        Log('filename %s -> %s', filename, ret)
+                        return ret
+                return filename
+            else:
+                return filename
+        except Exception, e:
+            Log('Exception:%s', e)
+            Log(traceback.format_exc())
+            return filename
 
 
 class FileSizeCheckThread(threading.Thread):
