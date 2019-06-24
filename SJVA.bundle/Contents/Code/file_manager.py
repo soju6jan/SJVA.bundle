@@ -65,7 +65,7 @@ class FileManager(threading.Thread):
                             Log(_.filename)
                             _.wait_status = 'REAL_REMOVE'
                             ret = base.scan_queue.in_queue(_)
-                    elif _.wait_status == 'WRONG_PATH':
+                    elif _.wait_status == 'WRONG_PATH' or _.wait_status == 'EXCEPT_PATH':
                         self.entity_list.remove(_)
             except Exception, e:
                 Log('Exception:%s', e)
@@ -92,6 +92,8 @@ class FileManager(threading.Thread):
         else:
             if filename[0] != '/':
                 entity.wait_status = 'WRONG_PATH'
+        if filename.startswith('NONE'):
+            entity.wait_status = 'EXCEPT_PATH'
         self.entity_list.append(entity)
         return 'ADD_OK'
     
@@ -109,10 +111,13 @@ class FileManager(threading.Thread):
                     source, target = [x.strip() for x in rule.split(',')]
                     if filename.startswith(source):
                         ret = filename.replace(source, target)
-                        if target[0] == '/':
-                            ret = ret.replace('\\', '/')
+                        if target == 'NONE':
+                            return 'NONE ' + filename
                         else:
-                            ret = ret.replace('/', '\\')
+                            if target[0] == '/':
+                                ret = ret.replace('\\', '/')
+                            else:
+                                ret = ret.replace('/', '\\')
                         Log('filename %s -> %s', filename, ret)
                         return ret
                 return filename

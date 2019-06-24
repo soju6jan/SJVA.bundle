@@ -88,7 +88,8 @@ class EntityScan(object):
             ret += '(E)'            
         elif self.wait_status == 'WRONG_PATH':
             ret = '[WRONG_PATH]'
-        
+        elif self.wait_status == 'EXCEPT_PATH':
+            ret = '[EXCEPT_PATH]'
         return ret
 
 
