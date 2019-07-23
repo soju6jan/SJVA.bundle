@@ -214,11 +214,14 @@ class ScanThread(threading.Thread):
                         url = _
                         params = { 'filename' : self.entity.filename, 'id' : self.entity.callback_id }
                         postdata = urllib.urlencode( params ) 
-                        request = urllib2.Request(url, postdata)
-                        response = urllib2.urlopen(request)
-                        Log('CALLBACK RET : %s', response.read())    
+                        #request = urllib2.Request(url, postdata)
+                        #response = urllib2.urlopen(request)
+                        response = HTTP.Request(url, data=postdata)
+                        #Log('CALLBACK RET : %s', response.read())    
+                        Log('CALLBACK RET : %s', response.content)    
                     except:
                         Log(traceback.format_exc())
+                        #HTTP.request(url, data=postdata)
                 self.entity.time_scan_end = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
                 Log('Scan END')
             except Exception, e: 
