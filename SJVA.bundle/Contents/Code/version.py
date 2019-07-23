@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '0.1.4.6'
+VERSION = '0.1.7.6'
 """
-Last Version : 0.1.4.6
+Last Version : 0.1.7.6
  
 <ChangeLog>
+0.1.7.6 (2019-07-24)
+ - Callback urllib2 대신 PLEX API 사용
+
 0.1.4.6 (2019-06-24)
  - 스캔명령 파일 경로 수정 기능 추가
 
