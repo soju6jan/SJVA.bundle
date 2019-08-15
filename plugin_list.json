@@ -70,25 +70,16 @@
             "identifier" : "com.plexapp.agents.sj_daum",   
             "name" : "SJ Daum",
             "url_icon" : "https://github.com/soju6jan/SJ_Daum.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "Daum Agent",
+            "description" : "SJ Daum Agent",
             "author" : "soju6jan",
             "url_zip" : "https://github.com/soju6jan/SJ_Daum.bundle/archive/master.zip"
         },
         {
             "type" : "agent",
             "identifier" : "com.plexapp.agents.naver_music",   
-            "name" : "NaverMusic(hojel)",
-            "url_icon" : "https://github.com/hojel/NaverMusic.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "hojel님의 NaverMusic",
-            "author" : "hojel",
-            "url_zip" : "https://github.com/hojel/NaverMusic.bundle/archive/master.zip",
-        },
-        {
-            "type" : "agent",
-            "identifier" : "com.plexapp.agents.naver_music",   
             "name" : "NaverMusic Fork버전",
             "url_icon" : "https://github.com/soju6jan/NaverMusic.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "NaverMusic",
+            "description" : "hojel님 NaverMusic fork 하여 정상 동작하도록 수정",
             "author" : "soju6jan",
             "url_zip" : "https://github.com/soju6jan/NaverMusic.bundle/archive/master.zip",
         },
@@ -106,7 +97,7 @@
             "identifier" : "com.plexapp.agents.xbmcnfo",   
             "name" : "XBMCnfoMoviesImporter",
             "url_icon" : "https://github.com/gboudreau/XBMCnfoMoviesImporter.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "XBMCnfoMoviesImporter",
+            "description" : "XBMCnfoMoviesImporter. nfo 파일로 메타 생성",
             "author" : "gboudreau",
             "url_zip" : "https://github.com/gboudreau/XBMCnfoMoviesImporter.bundle/archive/master.zip"
         },
@@ -115,7 +106,7 @@
             "identifier" : "com.plexapp.agents.xbmcnfotv",   
             "name" : "XBMCnfoTVImporter",
             "url_icon" : "https://github.com/gboudreau/XBMCnfoTVImporter.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "XBMCnfoTVImporter",
+            "description" : "XBMCnfoTVImporter.  nfo 파일로 메타 생성",
             "author" : "gboudreau",
             "url_zip" : "https://github.com/gboudreau/XBMCnfoTVImporter.bundle/archive/master.zip"
         },
@@ -124,117 +115,28 @@
             "identifier" : "com.plexapp.agents.sj_jav_agent",   
             "name" : "SJ JAV",
             "url_icon" : "",
-            "description" : "SJ JAV",
+            "description" : "SJVA 와 연동하는 JAV 에이전트",
             "author" : "soju6jan",
             "url_zip" : "https://github.com/soju6jan/sj_jav/archive/master.zip",
             "root" : ["sj_jav-master", "SJ_JAV_Agent.bundle"]
         },
         {
             "type" : "agent",
-            "identifier" : "com.plexapp.agents.avgle",   
-            "name" : "Avgle",
-            "url_icon" : "",
-            "description" : "Avgle",
-            "author" : "soju6jan",
-            "url_zip" : "https://github.com/soju6jan/Avgle.bundle/archive/master.zip",
-            "root" : ["Avgle.bundle-master", "Avgle.bundle"]
-        },
-        {
-            "type" : "agent",
             "identifier" : "com.plexapp.agents.alsonglyricfind",   
             "name" : "AlsongLyricFind",
             "url_icon" : "",
-            "description" : "AlsongLyricFind",
+            "description" : "알송 가사 서버에서 가사를 가져오는 에이전트",
             "author" : "soju6jan",
             "url_zip" : "https://github.com/soju6jan/AlsongLyricFind.bundle/archive/master.zip",
         },
         {
-            "type" : "normal",
-            "identifier" : "at.gaubatz.patrick.tvplexend.channel",   
-            "name" : "TvplexendChannel",
-            "url_icon" : "https://github.com/pgaubatz/TvplexendChannel.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "TvplexendChannel",
-            "author" : "pgaubatz",
-            "url_zip" : "https://github.com/pgaubatz/TvplexendChannel.bundle/archive/master.zip",
-        },
-        {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.tvheadend-ng",   
-            "name" : "tvheadend-ng",
-            "url_icon" : "https://github.com/realriot/tvheadend-ng.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "tvheadend-ng",
-            "author" : "realriot",
-            "url_zip" : "https://github.com/realriot/tvheadend-ng.bundle/archive/master.zip"
-        },
-        {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.iptv",   
-            "name" : "IPTV",
-            "url_icon" : "https://github.com/Cigaras/IPTV.bundle/raw/master/Contents/Resources/icon-default.png",
-            "description" : "IPTV",
-            "author" : "Cigaras",
-            "url_zip" : "https://github.com/Cigaras/IPTV.bundle/archive/master.zip"
-        },
-        {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.pooq",   
-            "name" : "pooq",
-            "url_icon" : "https://github.com/soju6jan/pooq/raw/master/Pooq.bundle/Contents/Resources/icon-default.png",
-            "description" : "pooq",
-            "author" : "AnAs",
-            "url_zip" : "https://github.com/soju6jan/pooq/archive/master.zip",
-            "root" : ["pooq-master", "Pooq.bundle"]
-        },
-        {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.tving",   
-            "name" : "Tving",
-            "url_icon" : "https://github.com/soju6jan/tving/raw/master/Tving.bundle/Contents/Resources/icon-default.png",
-            "description" : "Tving",
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.smiconvert",   
+            "name" : "smi2srt",
+            "url_icon" : "",
+            "description" : "SMI파일을 SRT 파일로 변경해주는 에이전트",
             "author" : "soju6jan",
-            "url_zip" : "https://github.com/soju6jan/tving/archive/master.zip",
-            "root" : ["tving-master", "Tving.bundle"],
-            "manual" : [
-                { 
-                    "type" : "move", 
-                    "src": ["tving-master", "tving.py"], 
-                    "dest" : ["tving-master", "Tving.bundle", "Contents", "Code"]
-                }
-            ]
-        },
-        {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.oksusu",   
-            "name" : "Oksusu",
-            "url_icon" : "https://github.com/soju6jan/oksusu/raw/master/Oksusu.bundle/Contents/Resources/icon-default.png",
-            "description" : "Oksusu",
-            "author" : "soju6jan",
-            "url_zip" : "https://github.com/soju6jan/oksusu/archive/master.zip",
-            "root" : ["oksusu-master", "Oksusu.bundle"],
-            "manual" : [
-                { 
-                    "type" : "move", 
-                    "src": ["oksusu-master", "oksusu.py"], 
-                    "dest" : ["oksusu-master", "Oksusu.bundle", "Contents", "Code"]
-                }
-            ]
-        },
-        {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.klive",   
-            "name" : "KLive",
-            "url_icon" : "https://github.com/soju6jan/KLive/raw/master/KLive.bundle/Contents/Resources/icon-default.png",
-            "description" : "KLive",
-            "author" : "soju6jan",
-            "url_zip" : "https://github.com/soju6jan/KLive/archive/master.zip",
-            "root" : ["KLive-master", "KLive.bundle"],
-            "manual" : [
-                { 
-                    "type" : "move_all_file", 
-                    "src": ["KLive-master", "lib"], 
-                    "dest" : ["KLive-master", "KLive.bundle", "Contents", "Code"]
-                }
-            ]
-        },
+            "url_zip" : "https://github.com/soju6jan/SmiConvert.bundle/archive/master.zip",
+        }
     ]
 }
