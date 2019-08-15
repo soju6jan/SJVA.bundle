@@ -93,3 +93,18 @@ class EntityScan(object):
         return ret
 
 
+    def as_dict(self):
+        return {
+            'wait_status':self.wait_status, 
+            'section_id':self.section_id,
+            'filename':self.filename, 
+            'callback':self.callback, 
+            'callback_id':self.callback_id, 
+            'call_from':self.call_from, 
+            'directory':self.directory,
+            'time_make':self.time_make,
+            'time_inqueue':self.time_inqueue,
+            'time_scan_start':self.time_scan_start,
+            'time_scan_end':self.time_scan_end,
+            'status':self.status
+        }

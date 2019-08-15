@@ -4,7 +4,9 @@ import traceback
 import sys
 import time
 import subprocess
-    
+import os
+import io
+
 import base
 from version import VERSION
 from entity import EntityScan
@@ -425,3 +427,57 @@ def SJVA_START(version):
     return json.dumps({'ret':'ok'}) 
 
 
+# 2018-08-14
+@route('/command')
+def command(cmd, param1, param2): 
+    ret = {}
+    try:
+        ret['ret'] = 'wrong_command'
+        if cmd == 'get_scan_wait_list':
+            ret['data'] = []
+            for _ in reversed(base.filemanager.entity_list):
+                ret['data'].append(_.as_dict())
+        elif cmd == 'get_scan_completed_list':
+            ret['data'] = []
+            for _ in reversed(base.scan_queue.entity_list):
+                ret['data'].append(_.as_dict())
+        elif cmd == 'restart_scan_queue':
+            init()
+        elif cmd == 'reload_section':
+            base.load_section_list()
+            ret['data'] = str(len(base.section_list))
+        elif cmd == 'get_setcion':
+            ret['data'] = []
+            for _ in base.section_list:
+                ret['data'].append({'id':_['id'], 'title':_['title'], 'location':_['location']})
+        elif cmd == 'self_update':
+            ret['data'] = PluginHandle.update()
+        elif cmd == 'install_plugin':
+            identifier = param1
+            ret['data'] = PluginHandle.install(identifier)
+        elif cmd == 'install_plugin_confirm':
+            identifier = param1
+            ret['data'] = PluginHandle.is_plugin_install(identifier)
+        elif cmd == 'get_plugin_list':
+            ret['data'] = []
+            for _ in PluginHandle.get_list()['list'][1:]:
+                ret['data'].append({'name':_['name'], 'identifier':_['identifier'], 'description':_['description'], 'icon':_['url_icon']})
+        elif cmd == 'get_log':
+            tmps = param1.split('/')
+            Log(tmps)
+            filename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH))))
+            for x in tmps:
+                filename = os.path.join(filename, x)
+            Log(filename)
+            if os.path.exists(filename):
+                data = io.open(filename, 'r', encoding="utf8").read()
+                Log(data)
+                ret['data'] = data
+            else:
+                ret['data'] = 'wrong_filename'
+        ret['ret'] = 'success' 
+    except Exception, e: 
+        Log('Exception:%s', e)
+        ret['ret'] = 'exception'
+        ret['data'] = str(e)
+    return json.dumps(ret) 

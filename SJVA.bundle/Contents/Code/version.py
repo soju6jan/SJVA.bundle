@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '0.1.7.6'
+VERSION = '0.1.7.22'
 """
-Last Version : 0.1.7.6
+Last Version : 0.1.7.22
  
 <ChangeLog>
+0.1.7.6 (2019-07-24)
+ - PLEX Plugin 메뉴 삭제 대응
+
 0.1.7.6 (2019-07-24)
  - Callback urllib2 대신 PLEX API 사용
 
