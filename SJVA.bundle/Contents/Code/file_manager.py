@@ -136,7 +136,7 @@ class FileSizeCheckThread(threading.Thread):
     
     def run(self):
         while True:
-            time.sleep(60)            
+            time.sleep(30)            
             current_size = os.path.getsize(self.entity.filename)
             if self.file_size == current_size:
                 Log('FileSizeCheckThread size match!!')

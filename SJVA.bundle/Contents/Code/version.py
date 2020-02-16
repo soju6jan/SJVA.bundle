@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '0.1.7.22'
+VERSION = '0.2.4'
 """
-Last Version : 0.1.7.22
+Last Version : 0.2.4
  
 <ChangeLog>
+0.2.4 (2020-02-10)
+ - 동시 스캔 개수 설정 추가
+
 0.1.7.6 (2019-07-24)
  - PLEX Plugin 메뉴 삭제 대응
 

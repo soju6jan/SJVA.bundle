@@ -18,13 +18,14 @@ class ScanQueue(object):
     scan_queue = None  
     current_scan_entity = None
     flag_stop = False
-    current_scan_t = None
+    #current_scan_t = None
+    scan_thread_list = []
 
     def __init__(self):
         self.inqueue_mutex = Lock()
         self.entity_list = []
         self.start_scan_queue()  
-        self.wait_event = threading.Event()
+        #self.wait_event = threading.Event()
     
       
     ###############################################################
@@ -39,8 +40,8 @@ class ScanQueue(object):
     
     def stop(self):
         Log('scanqueue stop!! %s', self.current_scan_t)
-        if self.current_scan_t is not None:
-            self.current_scan_t.join()
+        #if self.current_scan_t is not None:
+        #    self.current_scan_t.join()
         if self.scan_thread is not None:
             self.flag_stop = True
             self.scan_queue.put(None)
@@ -52,6 +53,15 @@ class ScanQueue(object):
     def scan_queue_thread(self):
         while self.flag_stop == False:
             try:
+                while True:
+                    self.scan_thread_list = [t for t in self.scan_thread_list if t.is_completed != True]
+                    Log('Thread Count : %s', len(self.scan_thread_list))
+                    if len(self.scan_thread_list) <= int(Prefs['plex_scanner_count']):
+                        break
+                    time.sleep(10)
+                    Log('wait thread_end: %s', len(self.scan_thread_list))
+
+
                 Log('* 스캔 큐 대기 : %s', self.scan_queue.qsize())
                 self.current_scan_entity = self.scan_queue.get()
                 # 초기화
@@ -63,20 +73,21 @@ class ScanQueue(object):
                 self.current_scan_entity.scan_start_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 Log('* 스캔 큐 scan_start_time : %s', self.current_scan_entity.scan_start_time)
                 
-                #self.scan_start(self.current_scan_entity)
-                self.current_scan_t = ScanThread()
-                self.current_scan_t.set(self.current_scan_entity, self.wait_event)
-                self.current_scan_t.start()
+                scan_thread = ScanThread()
+                #scan_thread.set(self.current_scan_entity, self.wait_event)
+                scan_thread.set(self.current_scan_entity)
+                scan_thread.start()
                 Log('* 스캔 큐 thread 종료 대기')
-                #self.wait_event.wait()
-                self.current_scan_t.join(60*10)
-                if self.current_scan_t.is_alive():
-                    Log('* 스캔 큐 still Alive')
-                    self.current_scan_t.process.terminate()
-                    self.current_scan_t.join()
-                Log('process returncode %s', self.current_scan_t.process.returncode)
+                self.scan_thread_list.append(scan_thread)
+                #self.current_scan_t.join(60*10)
+                #if self.current_scan_t.is_alive():
+                #    Log('* 스캔 큐 still Alive')
+                #    self.current_scan_t.process.terminate()
+                #    self.current_scan_t.join()
+                #Log('process returncode %s', self.current_scan_t.process.returncode)
 
-                self.current_scan_t = None
+                #self.current_scan_t = None
+
                 # 초기화 한번 체크
                 if self.flag_stop: return
                 self.current_scan_entity.status = 'SCAN_COMPLETED' 
@@ -139,12 +150,13 @@ class ScanQueue(object):
 
 class ScanThread(threading.Thread):
     entity = None
-    wait_event = None
+    #wait_event = None
     process = None
+    is_completed = False
     
-    def set(self, entity, wait_event):
+    def set(self, entity):
         self.entity = entity
-        self.wait_event = wait_event
+        #self.wait_event = wait_event
 
     def run(self):
             try: 
@@ -228,6 +240,8 @@ class ScanThread(threading.Thread):
                 Log('Exception:%s', e)
                 Log(traceback.format_exc())
             finally:
-                if self.wait_event is not None:
-                    self.wait_event.set()
+                #if self.wait_event is not None:
+                #    self.wait_event.set()
+                self.is_completed = True
+
     

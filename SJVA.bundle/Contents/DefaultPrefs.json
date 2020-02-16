@@ -7,6 +7,12 @@
 		"default": "False"
 	},
 	{
+		"id": "plex_scanner_count",
+		"label": "동시 실행할 스캐너 개수",
+		"type": "text",
+		"default": "5"
+	},
+	{
 		"id": "use_scan_filename_change_rule",
 		"label": "스캔명령 수신시 경로 변경 규칙 사용",
 		"type": "bool",
