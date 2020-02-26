@@ -39,7 +39,7 @@ class ScanQueue(object):
         Log('Start.. Scan Queue!!') 
     
     def stop(self):
-        Log('scanqueue stop!! %s', self.current_scan_t)
+        #Log('scanqueue stop!! %s', self.current_scan_t)
         #if self.current_scan_t is not None:
         #    self.current_scan_t.join()
         if self.scan_thread is not None:
