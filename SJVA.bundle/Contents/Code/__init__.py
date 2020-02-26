@@ -39,7 +39,6 @@ def init():
     base.scan_queue = ScanQueue()
     base.filemanager = FileManager()
     base.load_section_list()
-    base.server()
 
 @handler(PREFIX, NAME, thumb = ICON)
 def MainMenu():
