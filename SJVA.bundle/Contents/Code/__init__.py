@@ -465,6 +465,9 @@ def command(cmd, param1, param2):
             tmps = param1.split('/')
             Log(tmps)
             filename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(base.CURRENT_PATH))))
+            # 2020-03-05 by rbits
+            if base.OS == 'SHIELD':
+                filename = filename.replace('/storage/emulated/0/Android/data/com.plexapp.mediaserver.smb', '/storage/emulated/0')
             for x in tmps:
                 filename = os.path.join(filename, x)
             Log(filename)

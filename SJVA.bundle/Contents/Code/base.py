@@ -14,7 +14,6 @@ except:
 OS = Platform.OS
 CURRENT_PATH = re.sub(r'^\\\\\?\\', '', os.getcwd())
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-in Support', 'Databases', 'com.plexapp.plugins.library.db')
-#SQLITE3 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', 'SJVA.bundle', 'pms', OS, 'sqlite3') 
 
 PYTHON = 'python'       
 if OS == 'Windows':
@@ -29,7 +28,12 @@ elif OS == 'Linux':
     if CURRENT_PATH.startswith('/volume'): #synology
         SCANNER = '/var/packages/Plex Media Server/target/Plex Media Scanner'
     else:
-        SCANNER = '/usr/lib/plexmediaserver/Plex Media Scanner'
+        # 2020-03-05 by rbits
+        if os.path.exists('/storage/emulated'):
+            OS = 'SHIELD'
+            SCANNER = '/data/user/0/com.plexapp.mediaserver.smb/Resources/Plex Media Scanner'
+        else:
+            SCANNER = '/usr/lib/plexmediaserver/Plex Media Scanner'
     SQLITE3 = 'sqlite3'
 
 
@@ -42,12 +46,16 @@ section_list = None
 def sql_command(sql_type, arg1=''):
     try:
         if sql_type == 0:
+            if OS == 'SHIELD':
+                return False, ''
             sql = 'update metadata_items set added_at = (select max(added_at) from metadata_items mi where mi.parent_id = metadata_items.id or mi.parent_id in(select id from metadata_items mi2 where mi2.parent_id = metadata_items.id)) where metadata_type = 2'
             command = [SQLITE3, DB, sql]
         elif sql_type == 1:
             sql = 'SELECT library_section_id, root_path FROM section_locations'
             command = [SQLITE3, DB, sql]
         elif sql_type == 'SELECT_FILENAME':
+            if OS == 'SHIELD':
+                return True, '0'
             sql = u"SELECT count(*) FROM media_parts WHERE file LIKE '%%%s%%';" % arg1
             from io import open
             with open("select.sql", "wb") as output:
