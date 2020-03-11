@@ -39,15 +39,6 @@
             "url" : "https://github.com/soju6jan/SJVA-Scanners/raw/master/SJVA_Scanner_KoreaTV_Download.py"
         },        
         {
-            "type" : "normal",
-            "identifier" : "com.plexapp.plugins.WebTools",   
-            "name" : "WebTools",
-            "url_icon" : "https://github.com/ukdtom/WebTools.bundle/raw/master/Contents/Resources/WebTools.png",
-            "description" : "WebTools",
-            "author" : "ukdtom",
-            "url_zip" : "https://github.com/ukdtom/WebTools.bundle/archive/master.zip"
-        },
-        {
             "type" : "agent",
             "identifier" : "com.plexapp.agents.daum_movie",
             "name" : "DaumMovie(axfree)",
@@ -82,6 +73,15 @@
             "description" : "hojel님 NaverMusic fork 하여 정상 동작하도록 수정",
             "author" : "soju6jan",
             "url_zip" : "https://github.com/soju6jan/NaverMusic.bundle/archive/master.zip",
+        },
+        {
+            "type" : "agent",
+            "identifier" : "com.plexapp.agents.youtube_music",   
+            "name" : "YouTubeMusic",
+            "url_icon" : "",
+            "description" : "rbitts 님이 만드신 Youtube 에이전트",
+            "author" : "rbitts",
+            "url_zip" : "https://github.com/rbitts/YouTubeMusic.bundle/archive/master.zip",
         },
         {
             "type" : "agent",
