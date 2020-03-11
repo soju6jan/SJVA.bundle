@@ -200,17 +200,20 @@ class ScanThread(threading.Thread):
                 command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', tmp]
                 Log(command)
                 self.process = subprocess.Popen(command)   
+                process_ret = None
                 try:
                     #proc.communicate(timeout=10*60) 
-                    self.process.wait()
+                    #self.process.wait()
+                    process_ret = self.process.wait(timeout=60*30)
                 except Exception as e:
-                    Log('EXCEPTION:::: %s', e)
-                    self.process.kill() 
-                    #outs, errs = proc.communicate()
+                    try:
+                        Log('EXCEPTION:::: %s', e)
+                        self.process.kill() 
+                    except:
+                        Log('EXCEPTION:::: 2 %s', e)
                 
-                #Log('스캔 시작')
-                #proc.wait()
-                Log('스캔 종료')
+                Log('스캔 종료 : %s', process_ret)
+
                 if base.get_setting('use_recent_episode_at_show_dated'):
                     result = base.sql_command(0) 
             
