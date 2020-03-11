@@ -55,11 +55,18 @@ class ScanQueue(object):
             try:
                 while True:
                     self.scan_thread_list = [t for t in self.scan_thread_list if t.is_completed != True]
-                    Log('Thread Count : %s', len(self.scan_thread_list))
+                    Log(u'현재 스캔 스레드 개수 : %s', len(self.scan_thread_list))
                     if len(self.scan_thread_list) <= int(Prefs['plex_scanner_count']):
                         break
+                    
+                    for scan_thread in self.scan_thread_list:
+                        try:
+                            if scan_thread.start_time is not None and scan_thread.start_time + datetime.timedelta(minutes=30) < datetime.datetime.now():
+                                Log('Kill..')
+                                scan_thread.process.kill()
+                        except:
+                            pass
                     time.sleep(10)
-                    Log('wait thread_end: %s', len(self.scan_thread_list))
 
 
                 Log('* 스캔 큐 대기 : %s', self.scan_queue.qsize())
@@ -153,6 +160,7 @@ class ScanThread(threading.Thread):
     #wait_event = None
     process = None
     is_completed = False
+    start_time = None
     
     def set(self, entity):
         self.entity = entity
@@ -199,12 +207,13 @@ class ScanThread(threading.Thread):
 
                 command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', tmp]
                 Log(command)
+                start_time = datetime.datetime.now()
                 self.process = subprocess.Popen(command)   
                 process_ret = None
                 try:
                     #proc.communicate(timeout=10*60) 
                     #self.process.wait()
-                    process_ret = self.process.wait(timeout=60*30)
+                    process_ret = self.process.wait()
                 except Exception as e:
                     try:
                         Log('EXCEPTION:::: %s', e)
