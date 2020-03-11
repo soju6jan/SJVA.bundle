@@ -79,8 +79,8 @@
             "identifier" : "com.plexapp.agents.youtube_music",   
             "name" : "YouTubeMusic",
             "url_icon" : "",
-            "description" : "rbitts 님이 만드신 Youtube 에이전트",
-            "author" : "rbitts",
+            "description" : "rbits 님이 만드신 Youtube 에이전트",
+            "author" : "rbits",
             "url_zip" : "https://github.com/rbitts/YouTubeMusic.bundle/archive/master.zip",
         },
         {
