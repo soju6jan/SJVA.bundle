@@ -55,17 +55,21 @@ class ScanQueue(object):
             try:
                 while True:
                     self.scan_thread_list = [t for t in self.scan_thread_list if t.is_completed != True]
+                    for scan_thread in self.scan_thread_list:
+                        Log('start_time:%s', scan_thread.start_time)
                     Log(u'현재 스캔 스레드 개수 : %s', len(self.scan_thread_list))
                     if len(self.scan_thread_list) <= int(Prefs['plex_scanner_count']):
                         break
                     
                     for scan_thread in self.scan_thread_list:
+                        Log('start_time:%s', scan_thread.start_time)
                         try:
                             if scan_thread.start_time is not None and scan_thread.start_time + datetime.timedelta(minutes=30) < datetime.datetime.now():
                                 Log('Kill..')
                                 scan_thread.process.kill()
                         except:
-                            pass
+                            Log('Kill.. exception')
+                            Log(traceback.format_exc())
                     time.sleep(10)
 
 
@@ -207,7 +211,7 @@ class ScanThread(threading.Thread):
 
                 command = [base.SCANNER, '--scan', '--refresh', '--section', self.entity.section_id, '--directory', tmp]
                 Log(command)
-                start_time = datetime.datetime.now()
+                self.start_time = datetime.datetime.now()
                 self.process = subprocess.Popen(command)   
                 process_ret = None
                 try:
