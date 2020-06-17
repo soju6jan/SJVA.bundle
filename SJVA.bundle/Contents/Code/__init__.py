@@ -420,8 +420,17 @@ def db_handle(action, args):
     ret, log = base.sql_command(action, args)
     Log('db_handle [%s:%s] %s', action, args, log)
     return log
-
-
+ 
+@route('/os_path_exists')
+def os_path_exists(filepath):
+    try:
+        filepath = unicodedata.normalize('NFKC', unicode(filepath))
+    except Exception, e: 
+        try:  
+            filepath = urllib.unquote(filepath).decode('euc-kr')
+        except UnicodeDecodeError:  
+            filepath = urllib.unquote(filepath)
+    return str(os.path.exists(filepath))
 
 
 
