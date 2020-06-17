@@ -406,6 +406,26 @@ def count_in_library(filename):
     Log('count_in_library [%s] %s', filename, log)
     return log
 
+@route('/db_handle')
+def db_handle(action, args):
+    try:
+        args = unicodedata.normalize('NFKC', unicode(args))
+    except Exception, e: 
+        Log('Exception:%s', e)
+        #Log(traceback.format_exc())
+        try:  
+            args = urllib.unquote(args).decode('euc-kr')
+        except UnicodeDecodeError:  
+            args = urllib.unquote(args)
+    ret, log = base.sql_command(action, args)
+    Log('db_handle [%s:%s] %s', action, args, log)
+    return log
+
+
+
+
+
+
 ### TVH
 #http://%s/:/plugins/com.plexapp.plugins.SJVA/function/tvhm3u?X-Plex-Token=%s
 @route('/tvhm3u')

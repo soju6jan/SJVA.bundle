@@ -61,6 +61,19 @@ def sql_command(sql_type, arg1=''):
             with open("select.sql", "wb") as output:
                 output.write(sql)
             command = [SQLITE3, DB, '.read select.sql']
+        elif sql_type == 'get_metadata_id_by_filepath':
+            sql = u"SELECT metadata_item_id FROM media_items WHERE id = (SELECT media_item_id FROM media_parts WHERE file = '%s')" % arg1
+            from io import open
+            with open("select.sql", "wb") as output:
+                output.write(sql)
+            command = [SQLITE3, DB, '.read select.sql']
+        elif sql_type == 'get_filepath_list_by_metadata_id':
+            sql = u"SELECT file FROM media_parts, media_items, metadata_items WHERE media_parts.media_item_id = media_items.id and media_items.metadata_item_id = metadata_items.id and metadata_items.id = %s ORDER BY media_parts.created_at" % arg1
+            from io import open
+            with open("select.sql", "wb") as output:
+                output.write(sql)
+            command = [SQLITE3, DB, '.read select.sql'] 
+
         Log('Command : %s', command) 
         #proc = subprocess.Popen(command)
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)

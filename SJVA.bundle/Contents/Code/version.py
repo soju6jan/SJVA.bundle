@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '0.2.4'
+VERSION = '2020-06-17'
 """
-Last Version : 0.2.4
+Last Version : 2020-06-17
  
 <ChangeLog>
+2020-06-17
+ -DB function 추가
+ 
 0.2.4 (2020-02-10)
  - 동시 스캔 개수 설정 추가
 
