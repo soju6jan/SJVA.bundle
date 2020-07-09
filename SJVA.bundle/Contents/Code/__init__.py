@@ -23,7 +23,7 @@ PREFIX = '/video/SJVA'
 ICON = 'icon-default.jpg'        
    
 ###############################################################
-#  plugin
+#  plugin 
 ###############################################################
 def Start():  
     ObjectContainer.title1 = NAME
@@ -420,7 +420,23 @@ def db_handle(action, args):
     ret, log = base.sql_command(action, args)
     Log('db_handle [%s:%s] %s', action, args, log)
     return log
- 
+
+@route('/db_query')
+def db_query(query):
+    try:
+        args = unicodedata.normalize('NFKC', unicode(query))
+    except Exception, e: 
+        Log('Exception:%s', e)
+        #Log(traceback.format_exc())
+        try:  
+            args = urllib.unquote(query).decode('euc-kr')
+        except UnicodeDecodeError:  
+            args = urllib.unquote(query)
+    ret = {}
+    ret['ret'], ret['data'] = base.sql_command2(query)
+    #Log('db_query [%s:%s] %s', action, args, log)
+    return ret
+
 @route('/os_path_exists')
 def os_path_exists(filepath):
     try:

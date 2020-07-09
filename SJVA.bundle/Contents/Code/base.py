@@ -77,13 +77,27 @@ def sql_command(sql_type, arg1=''):
         Log('Command : %s', command) 
         #proc = subprocess.Popen(command)
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
-        out, err = p.communicate()
+        out, err = p.communicate() 
         return True, out.strip()
     except Exception, e: 
         Log('Exception:%s', e)
         Log(traceback.format_exc())
         return None
 
+def sql_command2(query):
+    try:
+        Log('Command : %s', query) 
+        from io import open
+        with open("query.sql", "wb") as output:
+            output.write(query)
+        command = [SQLITE3, DB, '.read query.sql']
+        p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
+        out, err = p.communicate()
+        return True, out.strip().split('\n')
+    except Exception, e: 
+        Log('Exception:%s', e)
+        Log(traceback.format_exc())
+        return False, ''
 """
 def load_section_list():
     global section_list
