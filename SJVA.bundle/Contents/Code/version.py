@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = '2020-07-08'
+VERSION = '2020-07-08.1'
 """
 Last Version : 2020-06-17
  

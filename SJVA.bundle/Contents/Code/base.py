@@ -48,10 +48,10 @@ def sql_command(sql_type, arg1=''):
         if sql_type == 0:
             if OS == 'SHIELD':
                 return False, ''
-            sql = 'update metadata_items set added_at = (select max(added_at) from metadata_items mi where mi.parent_id = metadata_items.id or mi.parent_id in(select id from metadata_items mi2 where mi2.parent_id = metadata_items.id)) where metadata_type = 2'
+            sql = 'update metadata_items set added_at = (select max(added_at) from metadata_items mi where mi.parent_id = metadata_items.id or mi.parent_id in(select id from metadata_items mi2 where mi2.parent_id = metadata_items.id)) where metadata_type = 2;'
             command = [SQLITE3, DB, sql]
         elif sql_type == 1:
-            sql = 'SELECT library_section_id, root_path FROM section_locations'
+            sql = 'SELECT library_section_id, root_path FROM section_locations;'
             command = [SQLITE3, DB, sql]
         elif sql_type == 'SELECT_FILENAME':
             if OS == 'SHIELD':
@@ -62,13 +62,13 @@ def sql_command(sql_type, arg1=''):
                 output.write(sql)
             command = [SQLITE3, DB, '.read select.sql']
         elif sql_type == 'get_metadata_id_by_filepath':
-            sql = u"SELECT metadata_item_id FROM media_items WHERE id = (SELECT media_item_id FROM media_parts WHERE file = '%s')" % arg1
+            sql = u"SELECT metadata_item_id FROM media_items WHERE id = (SELECT media_item_id FROM media_parts WHERE file = '%s');" % arg1
             from io import open
             with open("select.sql", "wb") as output:
                 output.write(sql)
             command = [SQLITE3, DB, '.read select.sql']
         elif sql_type == 'get_filepath_list_by_metadata_id':
-            sql = u"SELECT file FROM media_parts, media_items, metadata_items WHERE media_parts.media_item_id = media_items.id and media_items.metadata_item_id = metadata_items.id and metadata_items.id = %s ORDER BY media_parts.created_at" % arg1
+            sql = u"SELECT file FROM media_parts, media_items, metadata_items WHERE media_parts.media_item_id = media_items.id and media_items.metadata_item_id = metadata_items.id and metadata_items.id = %s ORDER BY media_parts.created_at;" % arg1
             from io import open
             with open("select.sql", "wb") as output:
                 output.write(sql)
@@ -86,11 +86,12 @@ def sql_command(sql_type, arg1=''):
 
 def sql_command2(query):
     try:
-        Log('Command : %s', query) 
+        query += ';'
         from io import open
         with open("query.sql", "wb") as output:
             output.write(query)
         command = [SQLITE3, DB, '.read query.sql']
+        Log('Command : %s', command) 
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
         out, err = p.communicate()
         return True, out.strip().split('\n')
