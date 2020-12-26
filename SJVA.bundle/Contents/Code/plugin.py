@@ -22,7 +22,8 @@ class PluginHandle(object):
 
     @classmethod
     def get_list(cls):
-        url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/plugin_list.json'
+        #url = 'https://raw.githubusercontent.com/soju6jan/SJVA.bundle/master/plugin_list.json'
+        url = 'https://raw.githubusercontent.com/soju6jan/sjva_support/master/plex_install_plugin_list.json'
         data = JSON.ObjectFromURL(url)
         Log(data)
         cls.plugin_list = data

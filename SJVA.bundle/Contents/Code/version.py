@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-VERSION = '2020-07-08.1'
+VERSION = '2020-12-26'
 """
-Last Version : 2020-06-17
+Last Version : 2020-12-26
  
 <ChangeLog>
+2020-12-26
+ - 범용 플러그인 인스톨 가능
+
 2020-06-17
- -DB function 추가
+ - DB function 추가
  
 0.2.4 (2020-02-10)
  - 동시 스캔 개수 설정 추가
