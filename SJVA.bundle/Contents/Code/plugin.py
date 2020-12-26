@@ -180,7 +180,7 @@ class PluginInstallThread(threading.Thread):
                         for _ in self.data['root']:
                             src = os.path.join(src, _)
                     else:
-                        dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', zip_root.replace('-master', ''))
+                        dest = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', zip_root.replace('-master', '').replace('-main', ''))
                         src = os.path.join(temp_path, zip_root)
                     move_or_copy = 'move'
                     if self.data["identifier"] == "com.plexapp.plugins.SJVA":
