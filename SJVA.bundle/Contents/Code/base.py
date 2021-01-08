@@ -117,6 +117,7 @@ def load_section_list():
     for directory in data['MediaContainer']['Directory']:
         for location in directory['Location']:
             section_list.append({'id':directory['key'], 'location':unicode(location['path'].strip()), 'title':directory['title']})
+    section_list = sorted(section_list, key=lambda itm: len(itm['location']), reverse=True)
     Log(section_list)
     
 
