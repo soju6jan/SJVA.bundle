@@ -19,7 +19,6 @@ PYTHON = 'python'
 if OS == 'Windows':
     SCANNER = r'C:\\Program Files (x86)\\Plex\\Plex Media Server\\Plex Media Scanner.exe'
     SQLITE3 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(CURRENT_PATH))), 'Plug-ins', 'SJVA.bundle', 'pms', 'sqlite3.exe') 
-    #SQLITE3 = '%s.exe' % SQLITE3
     PYTHON = 'C:\\Python27\\python.exe'
 elif OS == 'MacOSX':
     SCANNER = '/Applications/Plex Media Server.app/Contents/MacOS/Plex Media Scanner'
@@ -37,6 +36,11 @@ elif OS == 'Linux':
     SQLITE3 = 'sqlite3'
 
 
+SQLITE3_NEW = [SCANNER.replace('Scanner', 'Server'), '--sqlite']
+if OS == 'Windows': #18 왜?
+    SQLITE3_NEW[1] = '-sqlite'
+
+
 scan_queue = None
 filemanager = None
 section_list = None
@@ -49,7 +53,8 @@ def sql_command(sql_type, arg1=''):
             if OS == 'SHIELD':
                 return False, ''
             sql = 'update metadata_items set added_at = (select max(added_at) from metadata_items mi where mi.parent_id = metadata_items.id or mi.parent_id in(select id from metadata_items mi2 where mi2.parent_id = metadata_items.id)) where metadata_type = 2;'
-            command = [SQLITE3, DB, sql]
+            #command = [SQLITE3, DB, sql]
+            command = SQLITE3_NEW + [DB, sql]
         elif sql_type == 1:
             sql = 'SELECT library_section_id, root_path FROM section_locations;'
             command = [SQLITE3, DB, sql]
@@ -90,7 +95,14 @@ def sql_command2(query):
         from io import open
         with open("query.sql", "wb") as output:
             output.write(query)
-        command = [SQLITE3, DB, '.read query.sql']
+        # '.read query.sql' => 두개로 분리하지 말것. 
+        if query.lower().startswith('select'):
+            command = [SQLITE3, DB, '.read query.sql']
+        else:
+            # 파일에서 읽는거 확인
+            command = SQLITE3_NEW + [DB, '.read query.sql']
+            #command = SQLITE3_NEW + [DB, u'%s' % query]
+
         Log('Command : %s', command) 
         p = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, bufsize=1)
         out, err = p.communicate()

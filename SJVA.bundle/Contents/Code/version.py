@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION = '2020-12-26'
+VERSION = '0.2.19.20'
 """
-Last Version : 2020-12-26
+Last Version : 0.2.19.20
  
 <ChangeLog>
+0.2.19.20
+ - sqlite3 실행파일 plex server 로 변경
+
 2020-12-26
  - 범용 플러그인 인스톨 가능
 
